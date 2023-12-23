@@ -31,7 +31,7 @@ void loadAccounts()
     if (file == NULL)
     {
         printf("Error opening file: %s\n", filename);
-        return 0;
+        return 0; //use exit() instead of return because this function could be used inside other fn
     }
 
 
@@ -45,7 +45,7 @@ void loadAccounts()
             printf("Invalid file format: %s\n", filename);
             break;
         }
-        accounts[count].account_no = strtoull(token, NULL, 10);
+        accounts[count].account_no = strtoull(token, NULL, 10); //what is strtoll?
 
         token = strtok(NULL, ",");
         if (token == NULL)
@@ -167,7 +167,7 @@ void quit(){
     printf("Are you sure thet you want to exit?\n1)yes                  2)no");
     int val;
     scanf("%d",&val);
-    if(val==1)
+    if(val==1) //what if val = 1????????????????
         exit(1);
 }
 
