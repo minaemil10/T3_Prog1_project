@@ -13,7 +13,7 @@ typedef struct
 } date;
 typedef struct
 {
-    char account_no;/*the data size is large*/
+    char account_no[15];/*the data size is large*/
     char name[100];
     char mail[100];
     double balance;
