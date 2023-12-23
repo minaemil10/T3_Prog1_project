@@ -22,6 +22,7 @@ typedef struct
 } user;
 
 user accounts[MAX_ACCOUNTS];        //accounts data
+int count = 5;
 void declare()
 {
     //0
@@ -108,7 +109,7 @@ const char* monthName(int month)
     }
 
 }
-void prinetr(user a)
+void printer(user a)
 {
     printf("Account number: %llu\n",a.account_no);
     printf("Name: %s\n",a.name);
@@ -118,10 +119,55 @@ void prinetr(user a)
     printf("Date Opened: %s %d\n",monthName(a.d_open.month),a.d_open.year);
 }
 
+void sortByName(user *a)
+{
+    int i,j, flag = 1;
+    user x;
+    for(i = 0 ; i < count-1; i++)
+    {
+        if(flag == 0) break;
+        flag = 0;
+        for(j = 0 ; j < count - i -1 ; j++)
+        {
 
+            if(strcmp((a+ j)-> name , (a+ j +1)-> name ) == 1)
+            {
+                x =  (*(a+ j));
+                (*(a + j)) = (*(a+ j +1));
+                (*(a+ j +1)) = x;
+                flag = 1;
+            }
+        }
+    }
+
+    //printf("%s\n",(a +1)->name);
+    //strcpy((a)->name,(a +1)->name);
+}
+void print()
+{
+    user sorted[MAX_ACCOUNTS] ;
+    int i;
+    printf("Not sorted:\n");
+    for(i=0 ; i < count ; i++)
+    {
+        sorted[i] = accounts[i];
+
+        printer(accounts[i]);
+        printf("\n");
+    }
+
+    sortByName(&sorted);
+    printf("\n\n");
+    printf("sorted:\n");
+    for(i=0 ; i < count ; i++)
+    {
+        printer(sorted[i]);
+        printf("\n");
+    }
+}
 int main()
 {
     declare();
-    prinetr(accounts[2]);
+    print();
     return 0;
 }
