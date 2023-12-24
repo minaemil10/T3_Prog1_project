@@ -5,6 +5,7 @@
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
 #define MAX_ACCOUNTS        100
+#define MAX_Keyword         50
 
 typedef struct
 {
@@ -105,7 +106,125 @@ void loadAccounts()
     fclose(file);
 }
 
-void save(){
+
+
+const char* monthName(int month)
+{
+    switch (month)
+    {
+    case 1:
+        return "January";
+        break;
+    case 2:
+        return "February";
+        break;
+    case 3:
+        return "March";
+        break;
+    case 4:
+        return "April";
+        break;
+    case 5:
+        return "May";
+        break;
+    case 6:
+        return "June";
+        break;
+    case 7:
+        return "July";
+        break;
+    case 8:
+        return "August";
+        break;
+    case 9:
+        return "September";
+        break;
+    case 10:
+        return "October";
+        break;
+    case 11:
+        return "November";
+        break;
+    case 12:
+        return "December";
+        break;
+    }
+
+}
+
+void printer(user a)
+{
+    printf("Account number: %s\n",a.account_no);
+    printf("Name: %s\n",a.name);
+    printf("E-mail: %s\n",a.mail);
+    printf("Balance: %.2lf $\n",a.balance);
+    printf("Mobile: %s\n",a.mobile);
+    printf("Date Opened: %s %d\n",monthName(a.d_open.month),a.d_open.year);
+}
+
+void advancedSearch()
+{
+    int i,j,k,keylen,namelen,check1,check2,good = 0,matchedlen = -1,hold ;
+    char keyword[MAX_Keyword] = {};
+    user matched[MAX_ACCOUNTS];
+    printf("Enter Keyword: ");
+    gets(keyword);
+    keylen = strlen(keyword);
+    for(i = 0; i < count ; i++)
+    {
+        good = 0;
+        namelen = strlen(accounts[i].name);
+        hold = -i; //just for safety because hold can have a random value = i and ruin some if conditions
+        for(j = 0 ; j < namelen  ; j++  )
+        {
+            good = 0;
+
+            check1 = (accounts[i].name[j] == keyword[0] || (accounts[i].name[j] + 32) == keyword[0] || (accounts[i].name[j] - 32) == keyword[0]);
+            if(check1)
+            {
+                good = 0;
+
+                for(k = j ; k-j <= keylen ; k++ )
+                {
+                    if(isspace(accounts[i].name[k]))
+                    {
+                        k++; //to jump the space
+                        j++; //to keep the cursor and the original k-j
+                    }
+                    check2 = (accounts[i].name[k] == keyword[k-j] || (accounts[i].name[k] + 32) == keyword[k-j] || (accounts[i].name[k] - 32) == keyword[k-j])  ;
+
+                    if(check2)
+                    {
+                        good++;
+                    }
+                    if(good == keylen && hold != i)
+                    {
+                        hold = i;
+                        matchedlen++;
+                        matched[matchedlen] = accounts[i];
+                    }
+                }
+            }
+        }
+    }
+
+    printf("\n\nSearch results:\n\n");
+    if(matchedlen != -1)
+    {
+        for(i = 0 ; i <= matchedlen ; i ++)
+        {
+            printer(matched[i]);
+            printf("\n");
+        }
+    }
+    else
+    {
+        printf("keyword not found\n");
+    }
+}
+
+void save()
+{
     const char* filename="accounts.txt";
     int i ;
     FILE* file = fopen(filename, "w+");
@@ -115,7 +234,8 @@ void save(){
         return 0;
     }
 
-    for(i=0;i<count;i++){
+    for(i=0; i<count; i++)
+    {
 
         fprintf(file,"%s,%s,%s,%0.2f,%s,%d-%d \n",accounts[i].account_no,accounts[i].name,accounts[i].mail,accounts[i].balance,accounts[i].mobile,accounts[i].d_open.month,accounts[i].d_open.year);
 
@@ -123,18 +243,30 @@ void save(){
     printf("\nsaved succesfully\n");
     fclose(file);
 }
-void quit(){
+void quit()
+{
     printf("Are you sure thet you want to exit?\n1)yes                  2)no\n");
     int val;
-    scanf("%d",&val);
-    if(val==1)
-        exit(1);
-}
+    do
+    {
+        scanf("%d",&val);
+        scanf("%c");
+        if(val==1)
+            exit(1);
+        if(val == 2)
+            main();
+        else
+            printf("Please enter number from 1 to 2!\n");
+    }
+    while(!(val>0 && val<3));
 
+}
 
 int main()
 {
+    int i;
     loadAccounts();
+    advancedSearch();
     save();
     quit();
     return 0;

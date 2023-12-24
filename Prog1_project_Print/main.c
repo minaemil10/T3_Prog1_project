@@ -123,12 +123,23 @@ void save(){
     printf("\nsaved succesfully\n");
     fclose(file);
 }
-void quit(){
+void quit()
+{
     printf("Are you sure thet you want to exit?\n1)yes                  2)no\n");
     int val;
-    scanf("%d",&val);
-    if(val==1)
-        exit(1);
+    do
+    {
+        scanf("%d",&val);
+        scanf("%c");
+        if(val==1)
+            exit(1);
+        if(val == 2)
+            main();
+        else
+            printf("Please enter number from 1 to 2!\n");
+    }
+    while(!(val>0 && val<3));
+
 }
 
 
@@ -407,6 +418,8 @@ void print()
     }
 
 }
+
+
 int main()
 {
     //declare();
