@@ -179,7 +179,7 @@ void advancedSearch()
         {
             good = 0;
 
-            check1 = (accounts[i].name[j] == keyword[0] || (accounts[i].name[j] + 32) == keyword[0] || (accounts[i].name[j] - 32) == keyword[0]);
+            check1 = (accounts[i].name[j] == keyword[0] || (accounts[i].name[j] + 32) == keyword[0] || (accounts[i].name[j] - 32) == keyword[0]); //capital check
             if(check1)
             {
                 good = 0;
@@ -189,15 +189,15 @@ void advancedSearch()
                     if(isspace(accounts[i].name[k]))
                     {
                         k++; //to jump the space
-                        j++; //to keep the cursor and the original k-j
+                        j++; //to keep the original k-j
                     }
                     check2 = (accounts[i].name[k] == keyword[k-j] || (accounts[i].name[k] + 32) == keyword[k-j] || (accounts[i].name[k] - 32) == keyword[k-j])  ;
 
                     if(check2)
                     {
-                        good++;
+                        good++; //used to check that all consecutive matched letters are = the length of the original keyword
                     }
-                    if(good == keylen && hold != i)
+                    if(good == keylen && hold != i) //hold used here because the same name could have several instances of the same keyword while is should be stored only once
                     {
                         hold = i;
                         matchedlen++;
@@ -250,7 +250,7 @@ void quit()
     do
     {
         scanf("%d",&val);
-        scanf("%c");
+        scanf("%c"); // to store the extra space to prevent messing up any gets() function in the code
         if(val==1)
             exit(1);
         if(val == 2)
