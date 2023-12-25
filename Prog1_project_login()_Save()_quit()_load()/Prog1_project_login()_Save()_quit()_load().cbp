@@ -2,12 +2,12 @@
 <CodeBlocks_project_file>
 	<FileVersion major="1" minor="6" />
 	<Project>
-		<Option title="project_V_1.0" />
+		<Option title="Prog1_project_login()_Save()_quit()_load()" />
 		<Option pch_mode="2" />
 		<Option compiler="gcc" />
 		<Build>
 			<Target title="Debug">
-				<Option output="bin/Debug/project_V_1" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Debug/Prog1_project_login()_Save()_quit()_load()" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Debug/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
@@ -16,7 +16,7 @@
 				</Compiler>
 			</Target>
 			<Target title="Release">
-				<Option output="bin/Release/project_V_1" prefix_auto="1" extension_auto="1" />
+				<Option output="bin/Release/Prog1_project_login()_Save()_quit()_load()" prefix_auto="1" extension_auto="1" />
 				<Option object_output="obj/Release/" />
 				<Option type="1" />
 				<Option compiler="gcc" />
