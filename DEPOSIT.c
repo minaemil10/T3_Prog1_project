@@ -59,11 +59,11 @@ void DEPOSIT()
     } while (atoi(depositAmount) > 10000); //validate for enterred amount
      do
     {
-        printf("Enter the Account Number to transfer money from: ");
+        printf("Enter the Account Number: ");
         scanf("%s", accountNumber);
          while(!checkNumber(accountNumber))
         {
-       printf("Enter the Account Number to transfer money from: ");
+       printf("Enter the Account Number: ");
         scanf("%s", accountNumber);
         }
         for(i=0; i<count; i++)
