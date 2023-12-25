@@ -42,21 +42,6 @@ void DEPOSIT()
 {
     int i,flag=0;
     char depositAmount[100],accountNumber[MAX_ACCOUNT_LENGTH];
-   do
-    {
-        printf("Enter the amount to be deposited (max $10,000): ");
-        scanf("%s", depositAmount);
-        while(!checkNumber(depositAmount))
-        {
-            printf("Enter the amount to be deposited (max $10,000): ");
-            scanf("%s", depositAmount);
-        }
-
-        if (atoi(depositAmount) > 10000)
-        {
-            printf("Error: Max deposit limit is $10,000\n");
-        }
-    } while (atoi(depositAmount) > 10000); //validate for enterred amount
      do
     {
         printf("Enter the Account Number: ");
@@ -82,7 +67,21 @@ void DEPOSIT()
         }
     }
     while (!flag); //validate for existing of the account
+ do
+    {
+        printf("Enter the amount to be deposited (max $10,000): ");
+        scanf("%s", depositAmount);
+        while(!checkNumber(depositAmount))
+        {
+            printf("Enter the amount to be deposited (max $10,000): ");
+            scanf("%s", depositAmount);
+        }
 
+        if (atoi(depositAmount) > 10000)
+        {
+            printf("Error: Max deposit limit is $10,000\n");
+        }
+    } while (atoi(depositAmount) > 10000); //validate for enterred amount
     accounts[i].balance+=atof(depositAmount);
     printf("Deposit successful\nNew balance: %f\n",accounts[i].balance);
         double deposit=atof(depositAmount);
