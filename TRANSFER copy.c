@@ -41,22 +41,8 @@ return 1;
 void TRANSFER()
 {
     char transferredAmount[100],accountNumber1[MAX_ACCOUNT_LENGTH],accountNumber2[MAX_ACCOUNT_LENGTH];
-    int i,j,flag1=0,flag2=0;
-    do
-    {
-        printf("Enter the amount to be transferred (max $10,000): ");
-        scanf("%s", transferredAmount);
-        while(!checkNumber(transferredAmount))
-        {
-            printf("Enter the amount to be transferred (max $10,000): ");
-            scanf("%s", transferredAmount);
-        }
-        if (atoi(transferredAmount) > 10000)
-        {
-            printf("Error: Max transferred limit is $10,000\n");
-        }
-    }
-    while (atoi(transferredAmount) > 10000);  //validate for enterred amount
+    int i,j,flag1=0,flag2=0,flag3,flag4;
+
     do
     {
         printf("Enter the Account Number to transfer money from: ");
@@ -69,10 +55,7 @@ void TRANSFER()
         for(i=0; i<count; i++)
         {
             if(!strcmp(accountNumber1,accounts[i].account_no))
-            {
                 flag1=1;
-             break;
-            }
         }
         if (!flag1)
         {
@@ -92,33 +75,61 @@ void TRANSFER()
         for(j=0; j<count; j++)
         {
             if(!strcmp(accountNumber2,accounts[j].account_no))
-            {
+               {
                 flag2=1;
                 break;
-            }
+               }
         }
         if (!flag2)
         {
             printf("Error: Account Number doesn't exist\n");
         }
+        if(!strcmp(accountNumber1,accountNumber2))
+        {
+         printf("Error: You can't transfer money to the same account\n");
+         flag3=0;
+        }
+        else flag3=1;
     }
-    while (!flag2);//validate for existing of the account
+    while (!flag2||!flag3);//validate for existing of the account
+        do
+    {
+        printf("Enter the amount to be transferred (max $10,000): ");
+        scanf("%s", transferredAmount);
+        while(!checkNumber(transferredAmount))
+        {
+            printf("Enter the amount to be transferred (max $10,000): ");
+            scanf("%s", transferredAmount);
+        }
+        if (atoi(transferredAmount) > 10000)
+        {
+            printf("Error: Max transferred limit is $10,000\n");
+        }
+        if(atof(transferredAmount)>accounts[i].balance)
+        {
+            printf("Error: You don't have enough balance to transfer\nYour balance: %f\n",accounts[i].balance);
+            flag4=0;
+        }
+        else flag4=1;
+    }
+    while (atoi(transferredAmount) > 10000||!flag4);  //validate for enterred amount
     accounts[i].balance-=atoll(transferredAmount);
     accounts[j].balance+=atoll(transferredAmount);  // Update the balances of the source and destination accounts
     printf("Transfer Successful\nNew balance of The source account: %f\nNew balance of The destination account: %f\n",accounts[i].balance,accounts[j].balance);
-      FILE* file1 = fopen(strcat(accountNumber1,".txt"), "a");
+    double transfer=atof(transferredAmount);
+   FILE* file1 = fopen(strcat(accountNumber1,".txt"), "a");
     if (file1 == NULL)
     {
         printf("Error opening file");
     }
-    fprintf(file1, "Transferred amount from the account: %f\n",atof(transferredAmount));
+    fprintf(file1, "Transferred amount from the account: %f New Balance: %f\n",transfer,accounts[i].balance);
      FILE* file2 = fopen(strcat(accountNumber2,".txt"), "a");
     if (file2 == NULL)
     {
         printf("Error opening file");
     }
 
-    fprintf(file2, "Transferred amount to the account: %f\n",atof(transferredAmount));
+    fprintf(file2, "Transferred amount to the account: %f New Balance: %f\n",transfer,accounts[j].balance);
     fclose(file1);
     fclose(file2);
    //MENU();
