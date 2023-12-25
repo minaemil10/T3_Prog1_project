@@ -31,7 +31,7 @@ while(*number!='\0')
 {
     if(!(*number>='0'&& *number<='9'))
     {
-        printf("Error: Invalid Input\n");
+        printf("Error: Invalid Input\n"); //error if input other than numbers
         return 0;
     }
     else number++;
