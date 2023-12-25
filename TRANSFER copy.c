@@ -69,7 +69,10 @@ void TRANSFER()
         for(i=0; i<count; i++)
         {
             if(!strcmp(accountNumber1,accounts[i].account_no))
+            {
                 flag1=1;
+             break;
+            }
         }
         if (!flag1)
         {
@@ -89,7 +92,10 @@ void TRANSFER()
         for(j=0; j<count; j++)
         {
             if(!strcmp(accountNumber2,accounts[j].account_no))
+            {
                 flag2=1;
+                break;
+            }
         }
         if (!flag2)
         {
@@ -100,16 +106,21 @@ void TRANSFER()
     accounts[i].balance-=atoll(transferredAmount);
     accounts[j].balance+=atoll(transferredAmount);  // Update the balances of the source and destination accounts
     printf("Transfer Successful\nNew balance of The source account: %f\nNew balance of The destination account: %f\n",accounts[i].balance,accounts[j].balance);
-   /* FILE* file = fopen("accounts.txt", "a");
-    if (file == NULL)
+      FILE* file1 = fopen(strcat(accountNumber1,".txt"), "a");
+    if (file1 == NULL)
     {
-        printf("Error opening file 'accounts.txt'");
-        return 0;
+        printf("Error opening file");
     }
-    fprintf(file, "%f\n", accounts[i].balance);
-        fprintf(file, "%f\n", accounts[j].balance);
+    fprintf(file1, "Transferred amount from the account: %f\n",atof(transferredAmount));
+     FILE* file2 = fopen(strcat(accountNumber2,".txt"), "a");
+    if (file2 == NULL)
+    {
+        printf("Error opening file");
+    }
 
-    fclose(file);*/
+    fprintf(file2, "Transferred amount to the account: %f\n",atof(transferredAmount));
+    fclose(file1);
+    fclose(file2);
    //MENU();
 
 }
