@@ -85,14 +85,14 @@ void DEPOSIT()
 
     accounts[i].balance+=atof(depositAmount);
     printf("Deposit successful\nNew balance: %f\n",accounts[i].balance);
-   /* FILE* file = fopen("accountNumber.txt", "a");
+FILE* file = fopen(strcat(accountNumber,".txt"), "a");
     if (file == NULL)
     {
-        printf("Error opening file 'accounts.txt'");
+        printf("Error opening file");
     }
-    fprintf(file, "%f\n", accounts[i].balance);
+    fprintf(file, "Deposit amount: %f\n", atof(depositAmount));
     fclose(file);
-    //MENU();*/
+    //MENU();
 }
 int main()
 {
