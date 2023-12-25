@@ -138,7 +138,7 @@ void quit()
         else
             printf("Please enter number from 1 to 2!\n");
     }
-    while(!(val>0 && val<3));
+    while(!(val>0 && val<3));//to check val entered
 
 }
 
