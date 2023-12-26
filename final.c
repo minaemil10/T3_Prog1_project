@@ -150,8 +150,6 @@ char* validateDuplication(char *printvalue,int *i)
     while (flag);
     return accountNumber;
 }
-
-
 char* validationName()
 {
     int flag ;
@@ -174,7 +172,6 @@ char* validationName()
     while (!flag);
     return name;
 }
-
 char* validateEmail()
 {
     char* email = (char*)malloc(100* sizeof(char));
@@ -201,8 +198,6 @@ char* validateEmail()
     while (!flag_mail);
     return email;
 }
-
-
 char* validateBalance()
 {
     char* balance = (char*)malloc(100* sizeof(char));

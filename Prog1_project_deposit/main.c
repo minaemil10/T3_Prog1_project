@@ -25,9 +25,7 @@ typedef struct
 user accounts[MAX_ACCOUNTS];        //accounts data
 int count = 0;                      //accounts number
 int checkNumber(char* number)
-{
-
-while(*number!='\0')
+{while(*number!='\0')
 {
     if(!(*number>='0'&& *number<='9'))
     {
