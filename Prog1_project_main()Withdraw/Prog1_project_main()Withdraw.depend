@@ -1,0 +1,6 @@
+# depslib dependency file v1.0
+1703609821 source:/Users/sherrygirguis/Documents/GitHub/T3_Prog1_project/Prog1_project_main()Withdraw/main.c
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+
