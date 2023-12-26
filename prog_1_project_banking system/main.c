@@ -113,9 +113,11 @@ int login()
 
     printf("Enter username: ");
     scanf("%s", username);
+    getchar();
 
     printf("Enter password: ");
     scanf("%s", password);
+    getchar();
 
     FILE* file = fopen("users.txt", "r");
     if (file == NULL)
@@ -137,7 +139,7 @@ int login()
         {
             fclose(file);
             system("cls");
-            printf("welcome to the system ,%s\n",storedUsername);
+            printf("Welcome to the system ,%s\n",storedUsername);
             loadAccounts();
             return 1;  // Successful login
         }
@@ -180,7 +182,7 @@ int checkNumber(char* number)
     {
         if(!(*number>='0'&& *number<='9'||*number=='.'))
         {
-            printf("Error: Invalid Input\n");
+            printf("Error: Invalid Input number must consist of integers only\n");
             return 0;
         }
         else number++;
@@ -195,10 +197,12 @@ char* validateAccountNumber(char *printvalue,int *i)
     {
         printf("%s",printvalue);
         scanf("%s", accountNumber);
+        getchar();
         while(!checkNumber(accountNumber))
         {
             printf("%s",printvalue);
             scanf("%s", accountNumber);
+            getchar();
         }
         for(*i=0; *i<count; (*i)++)
         {
@@ -219,73 +223,101 @@ char* validateAccountNumber(char *printvalue,int *i)
 }
 char* validateDuplication(char *printvalue,int *i)
 {
-    int flag=0;
+    int flag1=0,flag2=0;
     char* accountNumber = (char*)malloc(MAX_ACCOUNT_LENGTH* sizeof(char));
     do
     {
-        flag=0;
+        flag1=0,flag2=0;
         printf("%s",printvalue);
-        gets(accountNumber) ;
+        scanf("%s", accountNumber);
+        getchar();
         while(!checkNumber(accountNumber))
         {
             printf("%s",printvalue);
             scanf("%s", accountNumber);
-            scanf("%s");
+            getchar();
         }
         for(*i=0; *i<count; (*i)++)
         {
             if(!strcmp(accountNumber,accounts[*i].account_no))
             {
-                flag=1;
+                flag1=1;
                 break;
             }
             else continue;
         }
-        if (flag)
+        if (flag1)
         {
             printf("Error: Account Number already exist\n");
         }
+        if(strlen(accountNumber)!=12)
+        {
+            printf("Error: Account Number must consist of 12 numbers\n");
+            flag2=1;
+        }
     }
-    while (flag);
+    while (flag1||flag2);
     return accountNumber;
+}
+int checkName(char*name,int i)
+{
+   if(name[i]>='a'&& name[i]<= 'z'||(name[i] >='A'&& name[i] <='Z'))
+   return 1;
+    else return 0;
 }
 char* validationName()
 {
-    int flag ;
+    int flag,countSpace=0;
     char* name = (char*)malloc(100* sizeof(char));
     do
     {
-        printf("Enter your name:");
+        countSpace=0;
+        printf("Enter your name: ");
         gets(name);
         for (int i=0; i<strlen(name); i++)
         {
             flag = 1;
-            if (!((name[i]>='a'&& name[i]<= 'z')||(name[i] >='A'&& name[i] <='Z')||(name[i] == ' ')))
+            if (!(checkName(name,i)||(name[i] == ' ')))
             {
                 printf("Error: Name must only consist of characters\n");
                 flag = 0;
-                break;
+            }
+            if(name[i]==' '&&checkName(name,i+1))
+            {
+                countSpace++;
             }
         }
+        if(countSpace<1)
+            {
+                printf("Error: Name must consist of first name and last name\n");
+            }
     }
-    while (!flag);
+    while (!flag||countSpace<1);
     return name;
 }
 char* validateEmail()
 {
     char* email = (char*)malloc(100* sizeof(char));
-    int flag_mail=0;
+    int flag_mail=0,flag=0,i,j;
     do
     {
-        printf("Please enter your email:");
+        flag_mail=0,flag=0;
+        printf("Please enter your email: ");
         scanf("%s",email);
-        for (int i = 0; email[i] != '\0'; i++)
+        getchar();
+        for (i = 0; email[i] != '\0'; i++)
         {
-            flag_mail=0;
             if (email[i] == '@')
             {
                 flag_mail = 1;
-                break;
+                for(j=i-1; email[j]!='\0'; j++)
+                {
+                    if(email[j]=='.')
+                    {
+                        flag=1;
+                        break;
+                    }
+                }
             }
         }
 
@@ -293,8 +325,12 @@ char* validateEmail()
         {
             printf("Error: Email must contain @\n");
         }
+        if(!flag)
+        {
+            printf("Error: Email must contain . after @\n");
+        }
     }
-    while (!flag_mail);
+    while (!flag_mail||!flag);
     return email;
 }
 char* validateBalance()
@@ -302,8 +338,9 @@ char* validateBalance()
     char* balance = (char*)malloc(100* sizeof(char));
     do
     {
-        printf("Please enter your balance:");
+        printf("Enter your balance: ");
         scanf("%s", balance);
+        getchar();
     }
     while (!checkNumber(balance));
     return balance;
@@ -317,10 +354,12 @@ char* validateMobile()
         flag=0;
         printf("Enter the mobile number: ");
         scanf("%s", mobileNumber);
+        getchar();
         while(!checkNumber(mobileNumber))
         {
             printf("Enter the mobile number: ");
             scanf("%s", mobileNumber);
+            getchar();
         }
         if(strlen(mobileNumber)!=11)
         {
@@ -618,8 +657,10 @@ int dateCmp(date a, date b)
     }
 
 }
-void add(int i,char printvalue[])
+void add()
 {
+    int i;
+    char printvalue[]="Enter account number: ";
     count++;
     strcpy(accounts[i].account_no,validateDuplication(printvalue,&i));
     strcpy(accounts[i].name,validationName());
@@ -780,14 +821,16 @@ void QUERY()
     //MENU();
 
 }
-void deleteacc(int i,char printvalue[])
+void deleteacc()
 {
+    int i;
+    char printvalue[]="Enter account number: ";
 
     strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
 
     if(accounts[i].balance!=0)
     {
-        printf("balance not equal to zero, account cannot be deleted");
+        printf("Balance not equal to zero, account cannot be deleted\n");
         MENU();
     }
 
@@ -796,13 +839,13 @@ void deleteacc(int i,char printvalue[])
         accounts[i]=accounts[i+1];
     }
     count--;
-    printf("the account has been deleted\n");
+    printf("The account has been deleted\n");
 
 
     FILE*file=fopen("accounts.txt","w");
     if(file==NULL)
     {
-        printf("error openning file'accounts.txt'");
+        printf("Error openning file'accounts.txt'");
         exit(-1);
     }
 
@@ -814,8 +857,10 @@ void deleteacc(int i,char printvalue[])
 
 }
 
-void modify (int i,char printvalue[])
+void modify ()
 {
+    int i;
+    char printvalue[]="Enter account number: ";
 
     int x=1;
     strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
@@ -823,7 +868,7 @@ void modify (int i,char printvalue[])
     int flag=1;
     do
     {
-        printf("what do you want to modify\n1)name\n2)mobile\n3)email\n4)return to menu");
+        printf("What do you want to modify\n1)Name\n2)Mobile\n3)Email\n4)Return to menu\n");
         int f;
         scanf("%d", &f);
         getchar();
@@ -875,8 +920,10 @@ void modify (int i,char printvalue[])
     fprintf(file, "%s,%s,%s\n", accounts[i].name, accounts[i].mail, accounts[i].mobile);
     fclose(file);
 }
-void report (int i,char printvalue[])
+void report ()
 {
+    int i;
+    char printvalue[]="Enter account number: ";
 
     strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
 
@@ -918,8 +965,6 @@ int flag_login = 0;
 void MENU()
 {
     int n;
-    int i=0;
-    char printvalue[]="print account number";
     system("cls");
 
     while (!flag_login)
@@ -940,13 +985,13 @@ void MENU()
         switch (n)
         {
         case 1:
-            add(i,printvalue);
+            add();
             break;
         case 2:
-            deleteacc(i,printvalue);
+            deleteacc();
             break;
         case 3:
-            modify(i,printvalue);
+            modify();
             break;
         case 4:
             WITHDRAW();
@@ -958,7 +1003,7 @@ void MENU()
             DEPOSIT();
             break;
         case 7:
-            report(i,printvalue);
+            report();
             break;
         case 8:
             QUERY();
