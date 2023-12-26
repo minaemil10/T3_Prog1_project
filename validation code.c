@@ -78,38 +78,38 @@ void declare()
 }
 int checkNumber(char* number)
 {
-while(*number!='\0')
-{
-    if(!(*number>='0'&& *number<='9'))
+    while(*number!='\0')
     {
-        printf("Error: Invalid Input\n");
-        return 0;
+        if(!(*number>='0'&& *number<='9'))
+        {
+            printf("Error: Invalid Input\n");
+            return 0;
+        }
+        else number++;
     }
-    else number++;
+    return 1;
 }
-return 1;
-}
-/*void validateAccountNumber(char *printvalue)
+char* validateAccountNumber(char *printvalue,int *i)
 {
-    int i,flag=0;
-    char accountNumber[MAX_ACCOUNT_LENGTH];
+    int flag=0;
+     char* accountNumber = (char*)malloc(MAX_ACCOUNT_LENGTH* sizeof(char));
     do
     {
         printf("%s",printvalue);
         scanf("%s", accountNumber);
-         while(!checkNumber(accountNumber))
+        while(!checkNumber(accountNumber))
         {
-       printf("%s",printvalue);
-        scanf("%s", accountNumber);
+            printf("%s",printvalue);
+            scanf("%s", accountNumber);
         }
-        for(i=0; i<count; i++)
+        for(*i=0; *i<count; (*i)++)
         {
-            if(!strcmp(accountNumber,accounts[i].account_no))
-               {
-                   flag=1;
-                   break;
-               }
-               else continue;
+            if(!strcmp(accountNumber,accounts[*i].account_no))
+            {
+                flag=1;
+                break;
+            }
+            else continue;
         }
         if (!flag)
         {
@@ -117,29 +117,30 @@ return 1;
         }
     }
     while (!flag);
-}*/
-void validateDuplication(char *printvalue)
+    return accountNumber;
+}
+char* validateDuplication(char *printvalue,int *i)
 {
-    int i,flag=0;
-    char accountNumber[MAX_ACCOUNT_LENGTH];
+    int flag=0;
+   char* accountNumber = (char*)malloc(MAX_ACCOUNT_LENGTH* sizeof(char));
     do
     {
         flag=0;
         printf("%s",printvalue);
         scanf("%s", accountNumber);
-         while(!checkNumber(accountNumber))
+        while(!checkNumber(accountNumber))
         {
-       printf("%s",printvalue);
-        scanf("%s", accountNumber);
+            printf("%s",printvalue);
+            scanf("%s", accountNumber);
         }
-        for(i=0; i<count; i++)
+        for(*i=0; *i<count; (*i)++)
         {
-            if(!strcmp(accountNumber,accounts[i].account_no))
-               {
-                   flag=1;
-                   break;
-               }
-               else continue;
+            if(!strcmp(accountNumber,accounts[*i].account_no))
+            {
+                flag=1;
+                break;
+            }
+            else continue;
         }
         if (flag)
         {
@@ -147,11 +148,104 @@ void validateDuplication(char *printvalue)
         }
     }
     while (flag);
+    return accountNumber;
+}
+
+
+char* validationName()
+{
+    int flag ;
+    char* name = (char*)malloc(100* sizeof(char));
+    do
+    {
+         printf("Enter your name:");
+         gets(name);
+        for (int i=0; i<strlen(name); i++)
+        {
+            flag = 1;
+            if (!((name[i]>='a'&& name[i]<= 'z')||(name[i] >='A'&& name[i] <='Z')||(name[i] == ' ')))
+            {
+                printf("Error: Name must only consist of characters\n");
+                flag = 0;
+                break;
+            }
+        }
+    }
+    while (!flag);
+    return name;
+}
+
+char* validateEmail()
+{
+    char* email = (char*)malloc(100* sizeof(char));
+    int flag_mail=0;
+    do
+    {
+        printf("Please enter your email:");
+        scanf("%s",email);
+        for (int i = 0; email[i] != '\0'; i++)
+        {
+            flag_mail=0;
+            if (email[i] == '@')
+            {
+                flag_mail = 1;
+                break;
+            }
+        }
+
+        if (!flag_mail)
+        {
+            printf("Error: Email must contain @\n");
+        }
+    }
+    while (!flag_mail);
+    return email;
+}
+
+
+char* validateBalance()
+{
+    char* balance = (char*)malloc(100* sizeof(char));
+    do
+    {
+        printf("Please enter your balance:");
+        scanf("%s", balance);
+    }
+    while (!checkNumber(balance));
+    return balance;
+}
+char* validateMobile()
+{
+    char* mobileNumber = (char*)malloc(15* sizeof(char));
+    int flag=0;
+    do
+    {
+        flag=0;
+        printf("Enter the mobile number: ");
+        scanf("%s", mobileNumber);
+        while(!checkNumber(mobileNumber))
+        {
+            printf("Enter the mobile number: ");
+            scanf("%s", mobileNumber);
+        }
+        if(strlen(mobileNumber)!=11)
+        {
+            printf("Error: Mobile number must consist of 11 numbers\n");
+            flag=1;
+        }
+    }
+    while(flag);
+  return mobileNumber;
 }
 int main()
 {
     declare();
-    char print[100]="Enter the account number to transfer money from: ";
-    validateDuplication(print);
-    //test duplication validation
+    char print[100]="Enter the account number: ";
+    //validateDuplication(print);
+    //validateAccountNumber(print);
+    //validationName();
+    //validateBalance();
+    //validateEmail();
+    validateMobile();
 }
+
