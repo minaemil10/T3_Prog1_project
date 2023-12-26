@@ -174,7 +174,6 @@ void advancedSearch()
     {
         good = 0;
         namelen = strlen(accounts[i].name);
-        hold = -i; //just for safety because hold can have a random value = i and ruin some if conditions
         for(j = 0 ; j < namelen  ; j++  )
         {
             good = 0;
