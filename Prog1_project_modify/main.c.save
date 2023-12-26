@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MAX_LEN  400
-#define MAX_LINES  100
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
 #define MAX_ACCOUNTS        100
@@ -26,6 +24,9 @@ typedef struct{
 
 user accounts[MAX_ACCOUNTS];        //accounts data
 int count = 6;                      //accounts number
+void menu(){
+
+}
 void declare()
 {
     //0
@@ -56,7 +57,7 @@ void declare()
     strcpy(accounts[3].account_no,"9780138871");
     strcpy(accounts[3].name,"Chris Ali") ;
     strcpy(accounts[3].mail,"c.ali@gmail.com") ;
-    accounts[3].balance = 0;
+    accounts[3].balance = 123.8;
     strcpy(accounts[3].mobile,"01554698321") ;
     accounts[3].d_open.month = 6;
     accounts[3].d_open.year = 2010;
@@ -77,7 +78,6 @@ void declare()
     accounts[5].d_open.month = 12;
     accounts[5].d_open.year = 2008;
 }
-
 int checkNumber(char* number)
 {
     while(*number!='\0')
@@ -150,35 +150,148 @@ char* validateDuplication(char *printvalue,int *i)
         }
     }
     while (flag);
-    return accountNumber;}
-void deleteacc(int i,char printvalue[]){
-
-strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
-
-    if(accounts[i].balance==0){
-        printf("account cannot be deleted");
-        exit(0);}
-
-for(int i;i<count-1;i++)
-    {accounts[i]=accounts[i+1];}
-    count--;
-    printf("the account has been deleted\n");
+    return accountNumber;
+}
 
 
-FILE*file=fopen("accounts.txt","w");
-if(file==NULL){printf("error openning file'accounts.txt'");
-               exit(-1);}
-
-for(int i=0;i <count-1;i++) {
-  fprintf(file, "%s,%s,%s,%lf,%s,%d-%d\n", accounts[i].account_no, accounts[i].name, accounts[i].mail, accounts[i].balance, accounts[i].mobile, accounts[i].d_open.month, accounts[i].d_open.year);}
-    fclose(file);
-
+char* validationName()
+{
+    int flag ;
+    char* name = (char*)malloc(100* sizeof(char));
+    do
+    {
+         printf("Enter your name:");
+         gets(name);
+        for (int i=0; i<strlen(name); i++)
+        {
+            flag = 1;
+            if (!((name[i]>='a'&& name[i]<= 'z')||(name[i] >='A'&& name[i] <='Z')||(name[i] == ' ')))
+            {
+                printf("Error: Name must only consist of characters\n");
+                flag = 0;
+                break;
+            }
+        }
     }
+    while (!flag);
+    return name;
+}
+
+char* validateEmail()
+{
+    char* email = (char*)malloc(100* sizeof(char));
+    int flag_mail=0;
+    do
+    {
+        printf("Please enter your email:");
+        scanf("%s",email);
+        for (int i = 0; email[i] != '\0'; i++)
+        {
+            flag_mail=0;
+            if (email[i] == '@')
+            {
+                flag_mail = 1;
+                break;
+            }
+        }
+
+        if (!flag_mail)
+        {
+            printf("Error: Email must contain @\n");
+        }
+    }
+    while (!flag_mail);
+    return email;
+}
 
 
-    int main(){
-    int i=0;
+char* validateBalance()
+{
+    char* balance = (char*)malloc(100* sizeof(char));
+    do
+    {
+        printf("Please enter your balance:");
+        scanf("%s", balance);
+    }
+    while (!checkNumber(balance));
+    return balance;
+}
+char* validateMobile()
+{
+    char* mobileNumber = (char*)malloc(15* sizeof(char));
+    int flag=0;
+    do
+    {
+        flag=0;
+        printf("Enter the mobile number: ");
+        scanf("%s", mobileNumber);
+        while(!checkNumber(mobileNumber))
+        {
+            printf("Enter the mobile number: ");
+            scanf("%s", mobileNumber);
+        }
+        if(strlen(mobileNumber)!=11)
+        {
+            printf("Error: Mobile number must consist of 11 numbers\n");
+            flag=1;
+        }
+    }
+    while(flag);
+  return mobileNumber;}
+
+void modify (int i,char printvalue[]){
+
+    int x=1;
+    strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
+
+    int flag=1;
+    do{
+    printf("what do you want to modify\n1)name\n2)mobile\n3)email\n4)return to menu");
+    int f;
+    scanf("%d", &f);
+    getchar();
+
+
+    switch (f) {
+
+        case 1: {
+
+        strcpy(accounts[i].name,validationName());
+            break;}
+
+        case 2: {
+
+            strcpy(accounts[i].mobile,validateMobile());
+            break;}
+
+        case 3: {
+          strcpy(accounts[i].mail,validateEmail());
+            break;}
+        case 4:
+            flag=0;
+             menu();  //delete comment when code is merged
+
+            break;
+        default:{
+            printf("choice not found\n");
+            x = 0;
+    }}}while(!x||flag);
+
+
+    FILE*file = fopen("accounts.txt", "a");
+    if (file == NULL) {
+        printf("error opening file 'accounts.txt'");
+        exit(-1);
+    }
+    fprintf(file, "%s,%s,%s\n", accounts[i].name, accounts[i].mail, accounts[i].mobile);
+    fclose(file);
+}
+
+
+int main()
+{   int i=0;
     char printvalue[]="print account number";
     declare();
-  deleteacc(i,printvalue);
+    modify(i,printvalue);
+    return 0;
 }
