@@ -261,8 +261,8 @@ char* validateDuplication(char *printvalue,int *i)
 }
 int checkName(char*name,int i)
 {
-   if(name[i]>='a'&& name[i]<= 'z'||(name[i] >='A'&& name[i] <='Z'))
-   return 1;
+    if(name[i]>='a'&& name[i]<= 'z'||(name[i] >='A'&& name[i] <='Z'))
+        return 1;
     else return 0;
 }
 char* validationName()
@@ -289,9 +289,9 @@ char* validationName()
             }
         }
         if(countSpace<1)
-            {
-                printf("Error: Name must consist of first name and last name\n");
-            }
+        {
+            printf("Error: Name must consist of first name and last name\n");
+        }
     }
     while (!flag||countSpace<1);
     return name;
@@ -738,7 +738,7 @@ void print()
     {
         sorted[i] = accounts[i]; //array to change it,s order without changing the original array
     }
-    printf("how would you like the accounts to be sorted?\n");
+    printf("How would you like the accounts to be sorted?\n");
     printf("1) By name\n2) By Balance\n3) By date opened\n");
     do
     {
@@ -761,7 +761,7 @@ void print()
         break;
     case 2:
         printf("Please choose the type:\n");
-        printf("1) highest to lowest\n2) lowest to highest\n");
+        printf("1) Highest to Lowest\n2) Lowest to Highest\n");
         do
         {
             scanf("%d",&type);
@@ -772,7 +772,7 @@ void print()
         break;
     case 3:
         printf("Please choose the type:\n");
-        printf("1) old to new\n2) new to old\n");
+        printf("1) Old to New\n2) New to Old\n");
         do
         {
             scanf("%d",&type);
