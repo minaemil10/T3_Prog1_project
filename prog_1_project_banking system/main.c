@@ -684,7 +684,7 @@ void add()
     }
 
     fseek(file,0,SEEK_SET);
-    fprintf(file, "/n%s,%s,%s,%.2lf,%s,%d-%d\n", accounts[count].account_no, accounts[count].name,
+    fprintf(file, "\n%s,%s,%s,%.2lf,%s,%d-%d\n", accounts[count].account_no, accounts[count].name,
             accounts[count].mail, accounts[count].balance, accounts[count].mobile,
             accounts[count].d_open.month, accounts[count].d_open.year);
     fclose(file);
