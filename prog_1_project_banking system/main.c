@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
+#include <ctype.h>
+
 #define MAX_LEN  400
 #define MAX_LINES  100
 #define MAX_USERNAME_LENGTH 50
@@ -27,7 +29,7 @@ typedef struct
 user accounts[MAX_ACCOUNTS];        //accounts data
 int count = 0;                      //accounts number
 
-void loadAccounts()
+int loadAccounts()
 {
     count =0;
     const char* filename="accounts.txt";
@@ -148,7 +150,7 @@ int login()
     fclose(file);
     return 0;
 }
-void save()
+int save()
 {
     const char* filename="accounts.txt";
     int i ;
@@ -221,7 +223,7 @@ char* validateAccountNumber(char *printvalue,int *i)
     while (!flag);
     return accountNumber;
 }
-char* validateDuplication(char *printvalue,int *i)
+char* validateDuplication(char *printvalue,int i)
 {
     int flag1=0,flag2=0;
     char* accountNumber = (char*)malloc(MAX_ACCOUNT_LENGTH* sizeof(char));
@@ -237,9 +239,9 @@ char* validateDuplication(char *printvalue,int *i)
             scanf("%s", accountNumber);
             getchar();
         }
-        for(*i=0; *i<count; (*i)++)
+        for(i=0; i<count; i++)
         {
-            if(!strcmp(accountNumber,accounts[*i].account_no))
+            if(!strcmp(accountNumber,accounts[i].account_no))
             {
                 flag1=1;
                 break;
@@ -445,7 +447,7 @@ void TRANSFER()
     fclose(file1);
     fclose(file2);
 }
-void WITHDRAW()
+int WITHDRAW()
 {
     int i;
     char printvalue[]="Enter the account number: ";
@@ -663,11 +665,11 @@ void add()
     int i;
     char printvalue[]="Enter account number: ";
     count++;
-    strcpy(accounts[i].account_no,validateDuplication(printvalue,&i));
-    strcpy(accounts[i].name,validationName());
-    strcpy(accounts[i].mobile,validateMobile());
-    strcpy(accounts[i].mail,validateEmail());
-    strcpy(accounts[i].mail,validateBalance());
+    strcpy(accounts[count].account_no,validateDuplication(printvalue,i));
+    strcpy(accounts[count].name,validationName());
+    strcpy(accounts[count].mobile,validateMobile());
+    strcpy(accounts[count].mail,validateEmail());
+    accounts[count].balance=atof(validateBalance());
 
     time_t t;
     time(&t);
@@ -676,7 +678,7 @@ void add()
     accounts[count].d_open.month = tm_info->tm_mon + 1;
     accounts[count].d_open.year = tm_info->tm_year + 1900;
 
-    FILE*file =fopen("accounts.txt", "a");
+    FILE*file =fopen("accounts.txt", "w+");
     if(file == NULL)
     {
         printf("Error opening file 'accounts.txt'\n");
@@ -684,7 +686,7 @@ void add()
     }
 
     fseek(file,0,SEEK_SET);
-    fprintf(file, "\n%s,%s,%s,%.2lf,%s,%d-%d\n", accounts[count].account_no, accounts[count].name,
+    fprintf(file, "%s,%s,%s,%.2lf,%s,%d-%d\n", accounts[count].account_no, accounts[count].name,
             accounts[count].mail, accounts[count].balance, accounts[count].mobile,
             accounts[count].d_open.month, accounts[count].d_open.year);
     fclose(file);
@@ -699,6 +701,7 @@ void add()
         exit(-1);
     }
     fclose(file1);
+
 }
 void sortByDate(user *a,int z)
 {
@@ -757,7 +760,7 @@ void print()
             if(!(type>0 && type<3)) printf("Please enter number from 1 to 2!\n");
         }
         while(!(type>0 && type<3));
-        sortByName(&sorted,type);
+        sortByName(sorted,type);
         break;
     case 2:
         printf("Please choose the type:\n");
@@ -768,7 +771,7 @@ void print()
             if(!(type>0 && type<3)) printf("Please enter number from 1 to 2!\n");
         }
         while(!(type>0 && type<3));
-        sortByBalance(&sorted,type);
+        sortByBalance(sorted,type);
         break;
     case 3:
         printf("Please choose the type:\n");
@@ -779,7 +782,7 @@ void print()
             if(!(type>0 && type<3)) printf("Please enter number from 1 to 2!\n");
         }
         while(!(type>0 && type<3));
-        sortByDate(&sorted,type);
+        sortByDate(sorted,type);
         break;
 
 
@@ -824,7 +827,7 @@ void QUERY()
 }
 void deleteacc()
 {
-    int i;
+    int i,flag=0;
     char printvalue[]="Enter account number: ";
 
     strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
@@ -832,9 +835,10 @@ void deleteacc()
     if(accounts[i].balance!=0)
     {
         printf("Balance not equal to zero, account cannot be deleted\n");
-        MENU();
+        flag=1;
     }
-
+    while(!flag)
+    {
     for( i; i<count-1; i++)
     {
         accounts[i]=accounts[i+1];
@@ -855,6 +859,7 @@ void deleteacc()
         fprintf(file, "%s,%s,%s,%lf,%s,%d-%d\n", accounts[i].account_no, accounts[i].name, accounts[i].mail, accounts[i].balance, accounts[i].mobile, accounts[i].d_open.month, accounts[i].d_open.year);
     }
     fclose(file);
+    }
 
 }
 
@@ -869,7 +874,7 @@ void modify ()
     int flag=1;
     do
     {
-        printf("What do you want to modify\n1)Name\n2)Mobile\n3)Email\n4)Return to menu\n");
+        printf("What do you want to modify\n1)Name\n2)Mobile\n3)Email\n");
         int f;
         scanf("%d", &f);
         getchar();
@@ -897,25 +902,21 @@ void modify ()
             strcpy(accounts[i].mail,validateEmail());
             break;
         }
-        case 4:
-            flag=0;
-            MENU();  //delete comment when code is merged
 
-            break;
         default:
         {
-            printf("choice not found\n");
+            printf("Choice not found\n");
             x = 0;
         }
         }
     }
-    while(!x||flag);
+    while(!x);
 
 
     FILE*file = fopen("accounts.txt", "a");
     if (file == NULL)
     {
-        printf("error opening file 'accounts.txt'");
+        printf("Error opening file 'accounts.txt'");
         exit(-1);
     }
     fprintf(file, "%s,%s,%s\n", accounts[i].name, accounts[i].mail, accounts[i].mobile);

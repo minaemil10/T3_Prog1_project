@@ -1,0 +1,3 @@
+Withdrawn amount from the account: 1000.000000 New Balance: 9000.000000
+Transferred amount from the account: 1000.000000 New Balance: 9000.000000
+Deposit amount: 10000.000000
