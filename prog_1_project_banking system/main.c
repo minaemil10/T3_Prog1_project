@@ -281,6 +281,7 @@ char* validationName()
             {
                 printf("Error: Name must only consist of characters\n");
                 flag = 0;
+                break;
             }
             if(name[i]==' '&&checkName(name,i+1))
             {
@@ -389,7 +390,7 @@ int validateBalance100000(char* balance)
 void DEPOSIT()
 {
     int i;
-    char printvalue[]="Enter the account number:";
+    char printvalue[]="Enter the account number: ";
     char accountNumber[MAX_ACCOUNT_LENGTH];
     strcpy(accountNumber,validateAccountNumber(printvalue,&i));
     char  depositAmount[100];
@@ -409,10 +410,10 @@ void DEPOSIT()
 void TRANSFER()
 {
     int i,j;
-    char printvalue1[]="Enter the account number to transfer money from:";
+    char printvalue1[]="Enter the account number to transfer money from: ";
     char accountNumber1[MAX_ACCOUNT_LENGTH];
     strcpy(accountNumber1,validateAccountNumber(printvalue1,&i));
-    char printvalue2[]="Enter the account number to transfer money to:";
+    char printvalue2[]="Enter the account number to transfer money to: ";
     char accountNumber2[MAX_ACCOUNT_LENGTH];
     strcpy(accountNumber2,validateAccountNumber(printvalue2,&j));
     while(atof(accountNumber1)==atof(accountNumber2))
@@ -447,7 +448,7 @@ void TRANSFER()
 void WITHDRAW()
 {
     int i;
-    char printvalue[]="Enter the account number:";
+    char printvalue[]="Enter the account number: ";
     char accountNumber[MAX_ACCOUNT_LENGTH];
     strcpy(accountNumber,validateAccountNumber(printvalue,&i));
     char  withdrawnAmount[100];
@@ -523,7 +524,7 @@ void advancedSearch()
     }
     else
     {
-        printf("keyword not found\n");
+        printf("Keyword not found\n");
     }
 }
 const char* monthName(int month)
