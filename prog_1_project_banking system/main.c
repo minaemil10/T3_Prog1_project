@@ -252,9 +252,9 @@ char* validateDuplication(char *printvalue,int i)
         {
             printf("Error: Account Number already exist\n");
         }
-        if(strlen(accountNumber)!=12)
+        if(strlen(accountNumber)!=10)
         {
-            printf("Error: Account Number must consist of 12 numbers\n");
+            printf("Error: Account Number must consist of 10 numbers\n");
             flag2=1;
         }
     }
