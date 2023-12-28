@@ -141,7 +141,7 @@ int login()
         {
             fclose(file);
             system("cls");
-            printf("Welcome to the system ,%s\n",storedUsername);
+            printf("Welcome to the system, %s\n",storedUsername);
             loadAccounts();
             return 1;  // Successful login
         }
@@ -373,21 +373,23 @@ char* validateMobile()
     while(flag);
     return mobileNumber;
 }
-int validateBalanceExistance(char *balance,int *i)
+int validateBalanceExistance(char *balance,int i)
 {
-    if(atof(balance)>accounts[*i].balance)
+    if(atof(balance)>accounts[i].balance)
     {
-        printf("Error: You don't have enough balance\nYour balance: %f\n",accounts[*i].balance);
-        validateBalance(balance);
+        printf("Error: You don't have enough balance\nYour balance: %f\n",accounts[i].balance);
+      return 0;
     }
+    else return 1;
 }
 int validateBalance100000(char* balance)
 {
     if(atof(balance)>10000.0)
     {
         printf("Error: Max limit per transaction is $10,000\n");
-        validateBalance(balance);
+       return 0;
     }
+    else return 1;
 }
 void DEPOSIT()
 {
@@ -396,8 +398,10 @@ void DEPOSIT()
     char accountNumber[MAX_ACCOUNT_LENGTH];
     strcpy(accountNumber,validateAccountNumber(printvalue,&i));
     char  depositAmount[100];
+    do{
     strcpy(depositAmount,validateBalance());
-    validateBalance100000(depositAmount);
+    }
+    while(!validateBalance100000(depositAmount));
     accounts[i].balance+=atof(depositAmount);
     printf("Deposit successful\nNew balance: %f\n",accounts[i].balance);
     double deposit=atof(depositAmount);
@@ -406,7 +410,7 @@ void DEPOSIT()
     {
         printf("Error opening file");
     }
-    fprintf(file, "Deposit amount: %f\n", deposit);
+    fprintf(file, "Deposit amount: %f New balance: %f\n", deposit,accounts[i].balance);
     fclose(file);
 }
 void TRANSFER()
@@ -424,9 +428,11 @@ void TRANSFER()
         strcpy(accountNumber2,validateAccountNumber(printvalue2,&j));
     }
     char  transferAmount[100];
+    do
+    {
     strcpy(transferAmount,validateBalance());
-    validateBalance100000(transferAmount);
-    validateBalanceExistance(transferAmount,&i);
+    }
+    while(!validateBalance100000(transferAmount)||!validateBalanceExistance(transferAmount,i));
     accounts[i].balance-=atof(transferAmount);
     accounts[j].balance+=atof(transferAmount);  // Update the balances of the source and destination accounts
     printf("Transfer Successful\nNew balance of The source account: %f\nNew balance of The destination account: %f\n",accounts[i].balance,accounts[j].balance);
@@ -454,9 +460,11 @@ int WITHDRAW()
     char accountNumber[MAX_ACCOUNT_LENGTH];
     strcpy(accountNumber,validateAccountNumber(printvalue,&i));
     char  withdrawnAmount[100];
-    strcpy(withdrawnAmount,validateBalance());
-    validateBalance100000(withdrawnAmount);
-    validateBalanceExistance(withdrawnAmount,&i);
+   do
+   {
+       strcpy(withdrawnAmount,validateBalance());
+   }
+    while(!validateBalance100000(withdrawnAmount)||!validateBalanceExistance(withdrawnAmount,i));
     accounts[i].balance-=atof(withdrawnAmount);
     printf("Transaction succeded\nNew Balance:%f\n",accounts[i].balance);
     double withdraw=atof(withdrawnAmount);
