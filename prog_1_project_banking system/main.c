@@ -4,8 +4,8 @@
 #include <time.h>
 #include <ctype.h>
 
-#define MAX_LEN  400
-#define MAX_LINES  100
+#define MAX_LEN             400
+#define MAX_LINES           100
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
 #define MAX_ACCOUNTS        100
@@ -371,6 +371,36 @@ int validateBalance100000(char* balance)
     }
     else return 1;
 }
+void add()
+{
+    int i;
+    char printvalue[]="Enter account number: ";
+    count++;
+    strcpy(accounts[count].account_no,validateDuplication(printvalue,i));
+    strcpy(accounts[count].name,validationName());
+    strcpy(accounts[count].mobile,validateMobile());
+    strcpy(accounts[count].mail,validateEmail());
+    accounts[count].balance=atof(validateBalance());
+
+    time_t t;
+    time(&t);
+    struct tm *tm_info = localtime(&t);
+
+    accounts[count].d_open.month = tm_info->tm_mon + 1;
+    accounts[count].d_open.year = tm_info->tm_year + 1900;
+    char filename[30] ;
+    sprintf(filename,"%s.txt",accounts[count].account_no);
+    FILE *file1=fopen(filename, "w");
+    if (file1 == NULL)
+    {
+        printf("Error opening file\n");
+        exit(-1);
+    }
+    fclose(file1);
+    askSave();
+    printer(accounts[count]);
+}
+
 void DEPOSIT()
 {
     int i;
@@ -417,7 +447,7 @@ void TRANSFER()
     while(!validateBalance100000(transferAmount)||!validateBalanceExistance(transferAmount,i));
     accounts[i].balance-=atof(transferAmount);
     accounts[j].balance+=atof(transferAmount);  // Update the balances of the source and destination accounts
-      askSave();
+    askSave();
     printf("Transfer Successful\nNew balance of The source account: %f\nNew balance of The destination account: %f\n",accounts[i].balance,accounts[j].balance);
     double transfer=atof(transferAmount);
     FILE* file1 = fopen(strcat(accountNumber1,".txt"), "a");
@@ -449,7 +479,7 @@ int WITHDRAW()
     }
     while(!validateBalance100000(withdrawnAmount)||!validateBalanceExistance(withdrawnAmount,i));
     accounts[i].balance-=atof(withdrawnAmount);
-      askSave();
+    askSave();
     printf("Transaction succeded\nNew Balance:%f\n",accounts[i].balance);
     double withdraw=atof(withdrawnAmount);
     FILE* file = fopen(strcat(accountNumber,".txt"), "a");
@@ -652,35 +682,6 @@ int dateCmp(date a, date b)
     }
 
 }
-void add()
-{
-    int i;
-    char printvalue[]="Enter account number: ";
-    count++;
-    strcpy(accounts[count].account_no,validateDuplication(printvalue,i));
-    strcpy(accounts[count].name,validationName());
-    strcpy(accounts[count].mobile,validateMobile());
-    strcpy(accounts[count].mail,validateEmail());
-    accounts[count].balance=atof(validateBalance());
-
-    time_t t;
-    time(&t);
-    struct tm *tm_info = localtime(&t);
-
-    accounts[count].d_open.month = tm_info->tm_mon + 1;
-    accounts[count].d_open.year = tm_info->tm_year + 1900;
-    askSave();
-    char filename[30] ;
-    sprintf(filename,"%s.txt",accounts[count].account_no);
-    FILE *file1=fopen(filename, "w");
-    if (file1 == NULL)
-    {
-        printf("Error opening file 'accounts.txt'\n");
-        exit(-1);
-    }
-    fclose(file1);
-
-}
 void sortByDate(user *a,int z)
 {
     int i,j, flag = 1,type;
@@ -810,7 +811,7 @@ void deleteacc()
 
     strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
 
-    if(accounts[i].balance!=0.0)
+    if(accounts[i].balance!=0)
     {
         printf("Balance not equal to zero, Account cannot be deleted\n");
         flag=1;
@@ -848,7 +849,8 @@ void modify ()
         {
 
             strcpy(accounts[i].name,validationName());
-              askSave();
+            askSave();
+            printer(accounts[i]);
             break;
         }
 
@@ -856,14 +858,18 @@ void modify ()
         {
 
             strcpy(accounts[i].mobile,validateMobile());
-              askSave();
+            askSave();
+            printer(accounts[i]);
+
             break;
         }
 
         case 3:
         {
             strcpy(accounts[i].mail,validateEmail());
-              askSave();
+            askSave();
+            printer(accounts[i]);
+
             break;
         }
 
@@ -947,13 +953,13 @@ void askSave()
     switch(atoi(choice))
     {
     case 1:
-            save();
+        save();
         break;
     case 2:
-            MENU();
+        MENU();
         break;
     case 3:
-            print("Invalid option");
+        print("Invalid option");
         askSave();
     }
 
