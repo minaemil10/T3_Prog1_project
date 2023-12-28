@@ -150,26 +150,6 @@ int login()
     fclose(file);
     return 0;
 }
-int save()
-{
-    const char* filename="accounts.txt";
-    int i ;
-    FILE* file = fopen(filename, "w+");
-    if (file == NULL)
-    {
-        printf("Error opening file: %s\n", filename);
-        return 0;
-    }
-
-    for(i=0; i<count; i++)
-    {
-
-        fprintf(file,"%s,%s,%s,%0.2f,%s,%d-%d \n",accounts[i].account_no,accounts[i].name,accounts[i].mail,accounts[i].balance,accounts[i].mobile,accounts[i].d_open.month,accounts[i].d_open.year);
-
-    }
-    printf("\nsaved succesfully\n");
-    fclose(file);
-}
 void quit()
 {
     printf("Are you sure thet you want to exit?\n1)yes                  2)no\n");
@@ -378,7 +358,7 @@ int validateBalanceExistance(char *balance,int i)
     if(atof(balance)>accounts[i].balance)
     {
         printf("Error: You don't have enough balance\nYour balance: %f\n",accounts[i].balance);
-      return 0;
+        return 0;
     }
     else return 1;
 }
@@ -387,7 +367,7 @@ int validateBalance100000(char* balance)
     if(atof(balance)>10000.0)
     {
         printf("Error: Max limit per transaction is $10,000\n");
-       return 0;
+        return 0;
     }
     else return 1;
 }
@@ -398,11 +378,13 @@ void DEPOSIT()
     char accountNumber[MAX_ACCOUNT_LENGTH];
     strcpy(accountNumber,validateAccountNumber(printvalue,&i));
     char  depositAmount[100];
-    do{
-    strcpy(depositAmount,validateBalance());
+    do
+    {
+        strcpy(depositAmount,validateBalance());
     }
     while(!validateBalance100000(depositAmount));
     accounts[i].balance+=atof(depositAmount);
+    askSave();
     printf("Deposit successful\nNew balance: %f\n",accounts[i].balance);
     double deposit=atof(depositAmount);
     FILE* file = fopen(strcat(accountNumber,".txt"), "a");
@@ -430,11 +412,12 @@ void TRANSFER()
     char  transferAmount[100];
     do
     {
-    strcpy(transferAmount,validateBalance());
+        strcpy(transferAmount,validateBalance());
     }
     while(!validateBalance100000(transferAmount)||!validateBalanceExistance(transferAmount,i));
     accounts[i].balance-=atof(transferAmount);
     accounts[j].balance+=atof(transferAmount);  // Update the balances of the source and destination accounts
+      askSave();
     printf("Transfer Successful\nNew balance of The source account: %f\nNew balance of The destination account: %f\n",accounts[i].balance,accounts[j].balance);
     double transfer=atof(transferAmount);
     FILE* file1 = fopen(strcat(accountNumber1,".txt"), "a");
@@ -460,12 +443,13 @@ int WITHDRAW()
     char accountNumber[MAX_ACCOUNT_LENGTH];
     strcpy(accountNumber,validateAccountNumber(printvalue,&i));
     char  withdrawnAmount[100];
-   do
-   {
-       strcpy(withdrawnAmount,validateBalance());
-   }
+    do
+    {
+        strcpy(withdrawnAmount,validateBalance());
+    }
     while(!validateBalance100000(withdrawnAmount)||!validateBalanceExistance(withdrawnAmount,i));
     accounts[i].balance-=atof(withdrawnAmount);
+      askSave();
     printf("Transaction succeded\nNew Balance:%f\n",accounts[i].balance);
     double withdraw=atof(withdrawnAmount);
     FILE* file = fopen(strcat(accountNumber,".txt"), "a");
@@ -685,21 +669,7 @@ void add()
 
     accounts[count].d_open.month = tm_info->tm_mon + 1;
     accounts[count].d_open.year = tm_info->tm_year + 1900;
-
-    FILE*file =fopen("accounts.txt", "w+");
-    if(file == NULL)
-    {
-        printf("Error opening file 'accounts.txt'\n");
-        exit(-1);
-    }
-
-    fseek(file,0,SEEK_SET);
-    fprintf(file, "%s,%s,%s,%.2lf,%s,%d-%d\n", accounts[count].account_no, accounts[count].name,
-            accounts[count].mail, accounts[count].balance, accounts[count].mobile,
-            accounts[count].d_open.month, accounts[count].d_open.year);
-    fclose(file);
-
-
+    askSave();
     char filename[30] ;
     sprintf(filename,"%s.txt",accounts[count].account_no);
     FILE *file1=fopen(filename, "w");
@@ -840,61 +810,45 @@ void deleteacc()
 
     strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
 
-    if(accounts[i].balance!=0)
+    if(accounts[i].balance!=0.0)
     {
-        printf("Balance not equal to zero, account cannot be deleted\n");
+        printf("Balance not equal to zero, Account cannot be deleted\n");
         flag=1;
     }
-    while(!flag)
+    if(!flag)
     {
-    for( i; i<count-1; i++)
-    {
-        accounts[i]=accounts[i+1];
+        for( i; i<count-1; i++)
+        {
+            accounts[i]=accounts[i+1];
+        }
+        count--;
+        printf("The account has been deleted\n");
+        save();
     }
-    count--;
-    printf("The account has been deleted\n");
-
-
-    FILE*file=fopen("accounts.txt","w");
-    if(file==NULL)
-    {
-        printf("Error openning file'accounts.txt'");
-        exit(-1);
-    }
-
-    for(int i=0; i <count-1; i++)
-    {
-        fprintf(file, "%s,%s,%s,%lf,%s,%d-%d\n", accounts[i].account_no, accounts[i].name, accounts[i].mail, accounts[i].balance, accounts[i].mobile, accounts[i].d_open.month, accounts[i].d_open.year);
-    }
-    fclose(file);
-    }
-
 }
 
 void modify ()
 {
     int i;
     char printvalue[]="Enter account number: ";
-
-    int x=1;
     strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
-
     int flag=1;
     do
     {
         printf("What do you want to modify\n1)Name\n2)Mobile\n3)Email\n");
-        int f;
-        scanf("%d", &f);
+        int choice;
+        scanf("%d", &choice);
         getchar();
 
 
-        switch (f)
+        switch (choice)
         {
 
         case 1:
         {
 
             strcpy(accounts[i].name,validationName());
+              askSave();
             break;
         }
 
@@ -902,33 +856,25 @@ void modify ()
         {
 
             strcpy(accounts[i].mobile,validateMobile());
+              askSave();
             break;
         }
 
         case 3:
         {
             strcpy(accounts[i].mail,validateEmail());
+              askSave();
             break;
         }
 
         default:
         {
             printf("Choice not found\n");
-            x = 0;
+            flag = 0;
         }
         }
     }
-    while(!x);
-
-
-    FILE*file = fopen("accounts.txt", "a");
-    if (file == NULL)
-    {
-        printf("Error opening file 'accounts.txt'");
-        exit(-1);
-    }
-    fprintf(file, "%s,%s,%s\n", accounts[i].name, accounts[i].mail, accounts[i].mobile);
-    fclose(file);
+    while(!flag);
 }
 void report ()
 {
@@ -971,6 +917,48 @@ void report ()
 
     fclose(file);
 }
+int save()
+{
+    const char* filename="accounts.txt";
+    int i ;
+    FILE* file = fopen(filename, "w+");
+    if (file == NULL)
+    {
+        printf("Error opening file: %s\n", filename);
+        return 0;
+    }
+
+    for(i=0; i<count; i++)
+    {
+
+        fprintf(file,"%s,%s,%s,%0.2f,%s,%d-%d \n",accounts[i].account_no,accounts[i].name,accounts[i].mail,accounts[i].balance,accounts[i].mobile,accounts[i].d_open.month,accounts[i].d_open.year);
+
+    }
+    printf("\nSaved Successfully\n");
+    fclose(file);
+}
+void askSave()
+{
+    char choice[10];
+    printf("Do you want to save the changes?\n1)Yes\t2)No\n");
+    scanf("%s",choice);
+    getchar();
+
+    switch(atoi(choice))
+    {
+    case 1:
+            save();
+        break;
+    case 2:
+            MENU();
+        break;
+    case 3:
+            print("Invalid option");
+        askSave();
+    }
+
+}
+
 int flag_login = 0;
 void MENU()
 {
