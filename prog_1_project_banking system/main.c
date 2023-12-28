@@ -373,21 +373,21 @@ int validateBalance100000(char* balance)
 }
 void add()
 {
-    int i;
     char printvalue[]="Enter account number: ";
     count++;
-    strcpy(accounts[count].account_no,validateDuplication(printvalue,i));
-    strcpy(accounts[count].name,validationName());
-    strcpy(accounts[count].mobile,validateMobile());
-    strcpy(accounts[count].mail,validateEmail());
-    accounts[count].balance=atof(validateBalance());
+    int i=count;
+    strcpy(accounts[i].account_no,validateDuplication(printvalue,i));
+    strcpy(accounts[i].name,validationName());
+    strcpy(accounts[i].mobile,validateMobile());
+    strcpy(accounts[i].mail,validateEmail());
+    accounts[i].balance=atof(validateBalance());
 
     time_t t;
     time(&t);
     struct tm *tm_info = localtime(&t);
 
-    accounts[count].d_open.month = tm_info->tm_mon + 1;
-    accounts[count].d_open.year = tm_info->tm_year + 1900;
+    accounts[i].d_open.month = tm_info->tm_mon + 1;
+    accounts[i].d_open.year = tm_info->tm_year + 1900;
     char filename[30] ;
     sprintf(filename,"%s.txt",accounts[count].account_no);
     FILE *file1=fopen(filename, "w");
@@ -398,7 +398,7 @@ void add()
     }
     fclose(file1);
     askSave();
-    printer(accounts[count]);
+    printer(accounts[i]);
 }
 
 void DEPOSIT()
@@ -413,8 +413,8 @@ void DEPOSIT()
         strcpy(depositAmount,validateBalance());
     }
     while(!validateBalance100000(depositAmount));
-    accounts[i].balance+=atof(depositAmount);
     askSave();
+    accounts[i].balance+=atof(depositAmount);
     printf("Deposit successful\nNew balance: %f\n",accounts[i].balance);
     double deposit=atof(depositAmount);
     FILE* file = fopen(strcat(accountNumber,".txt"), "a");
@@ -422,7 +422,7 @@ void DEPOSIT()
     {
         printf("Error opening file");
     }
-    fprintf(file, "Deposit amount: %f New balance: %f\n", deposit,accounts[i].balance);
+    fprintf(file, "Depositted amount to the account: %f New balance: %f\n", deposit,accounts[i].balance);
     fclose(file);
 }
 void TRANSFER()
@@ -445,9 +445,9 @@ void TRANSFER()
         strcpy(transferAmount,validateBalance());
     }
     while(!validateBalance100000(transferAmount)||!validateBalanceExistance(transferAmount,i));
+    askSave();
     accounts[i].balance-=atof(transferAmount);
     accounts[j].balance+=atof(transferAmount);  // Update the balances of the source and destination accounts
-    askSave();
     printf("Transfer Successful\nNew balance of The source account: %f\nNew balance of The destination account: %f\n",accounts[i].balance,accounts[j].balance);
     double transfer=atof(transferAmount);
     FILE* file1 = fopen(strcat(accountNumber1,".txt"), "a");
@@ -478,8 +478,8 @@ int WITHDRAW()
         strcpy(withdrawnAmount,validateBalance());
     }
     while(!validateBalance100000(withdrawnAmount)||!validateBalanceExistance(withdrawnAmount,i));
-    accounts[i].balance-=atof(withdrawnAmount);
     askSave();
+    accounts[i].balance-=atof(withdrawnAmount);
     printf("Transaction succeded\nNew Balance:%f\n",accounts[i].balance);
     double withdraw=atof(withdrawnAmount);
     FILE* file = fopen(strcat(accountNumber,".txt"), "a");
@@ -818,6 +818,7 @@ void deleteacc()
     }
     if(!flag)
     {
+        askSave();
         for( i; i<count-1; i++)
         {
             accounts[i]=accounts[i+1];
@@ -834,6 +835,7 @@ void modify ()
     char printvalue[]="Enter account number: ";
     strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
     int flag=1;
+    printer(accounts[i]);
     do
     {
         printf("What do you want to modify\n1)Name\n2)Mobile\n3)Email\n");
