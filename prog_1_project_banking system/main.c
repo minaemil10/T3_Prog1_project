@@ -141,7 +141,7 @@ int login()
         {
             fclose(file);
             system("cls");
-            printf("Welcome to the system, %s\n",storedUsername);
+            printf("Welcome to the system!\n");
             loadAccounts();
             return 1;  // Successful login
         }
@@ -394,6 +394,7 @@ void add()
     accounts[i].d_open.month = tm_info->tm_mon + 1;
     accounts[i].d_open.year = tm_info->tm_year + 1900;
     char filename[30] ;
+    sprintf(filename,"%s.txt",accounts[count].account_no);
     FILE *file1=fopen(filename, "w");
     if (file1 == NULL)
     {
@@ -907,16 +908,15 @@ void report ()
     char printvalue[]="Enter account number: ";
 
     strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
-
     char filename[30];
     sprintf(filename,"%s.txt",accounts[i].account_no);
-
+    FILE *file1=fopen(filename, "a");
 
     FILE*file=fopen(filename,"r");
 
     if (file== NULL)
     {
-        printf("Error opening file 'accounts.txt'\n");
+        printf("Error opening file\n");
         exit(-1);
     }
 
