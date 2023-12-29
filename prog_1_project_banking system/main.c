@@ -198,6 +198,7 @@ char* validateAccountNumber(char *printvalue,int *i)
         if (!flag)
         {
             printf("Error: Account Number doesn't exist\n");
+            if(askMenu()) return "0";
         }
     }
     while (!flag);
@@ -397,7 +398,7 @@ void add()
         exit(-1);
     }
     fclose(file1);
-    askSave();
+    if(!askSave()) return;
     printer(accounts[i]);
 }
 
@@ -406,14 +407,17 @@ void DEPOSIT()
     int i;
     char printvalue[]="Enter the account number: ";
     char accountNumber[MAX_ACCOUNT_LENGTH];
-    strcpy(accountNumber,validateAccountNumber(printvalue,&i));
+    char temp[MAX_ACCOUNT_LENGTH];
+    strcpy(temp,validateAccountNumber(printvalue,&i));
+    if(!atoi(temp)) return;
+    strcpy(accounts[i].account_no,temp);
     char  depositAmount[100];
     do
     {
         strcpy(depositAmount,validateBalance());
     }
     while(!validateBalance100000(depositAmount));
-    askSave();
+    if(!askSave()) return;
     accounts[i].balance+=atof(depositAmount);
     printf("Deposit successful\nNew balance: %f\n",accounts[i].balance);
     double deposit=atof(depositAmount);
@@ -430,14 +434,22 @@ void TRANSFER()
     int i,j;
     char printvalue1[]="Enter the account number to transfer money from: ";
     char accountNumber1[MAX_ACCOUNT_LENGTH];
-    strcpy(accountNumber1,validateAccountNumber(printvalue1,&i));
+    char temp1[MAX_ACCOUNT_LENGTH];
+    strcpy(temp1,validateAccountNumber(printvalue1,&i));
+    if(!atoi(temp1)) return;
+    strcpy(accounts[i].account_no,temp1);
     char printvalue2[]="Enter the account number to transfer money to: ";
     char accountNumber2[MAX_ACCOUNT_LENGTH];
-    strcpy(accountNumber2,validateAccountNumber(printvalue2,&j));
+    char temp2[MAX_ACCOUNT_LENGTH];
+    strcpy(temp2,validateAccountNumber(printvalue2,&j));
+    if(!atoi(temp2)) return;
+    strcpy(accounts[i].account_no,temp2);
     while(atof(accountNumber1)==atof(accountNumber2))
     {
         printf("Error: You can't transfer money to the same account\n");
-        strcpy(accountNumber2,validateAccountNumber(printvalue2,&j));
+        strcpy(temp2,validateAccountNumber(printvalue2,&j));
+        if(!atoi(temp2)) return;
+        strcpy(accounts[i].account_no,temp2);
     }
     char  transferAmount[100];
     do
@@ -445,7 +457,7 @@ void TRANSFER()
         strcpy(transferAmount,validateBalance());
     }
     while(!validateBalance100000(transferAmount)||!validateBalanceExistance(transferAmount,i));
-    askSave();
+    if(!askSave()) return;
     accounts[i].balance-=atof(transferAmount);
     accounts[j].balance+=atof(transferAmount);  // Update the balances of the source and destination accounts
     printf("Transfer Successful\nNew balance of The source account: %f\nNew balance of The destination account: %f\n",accounts[i].balance,accounts[j].balance);
@@ -471,14 +483,17 @@ int WITHDRAW()
     int i;
     char printvalue[]="Enter the account number: ";
     char accountNumber[MAX_ACCOUNT_LENGTH];
-    strcpy(accountNumber,validateAccountNumber(printvalue,&i));
+    char temp[MAX_ACCOUNT_LENGTH];
+    strcpy(temp,validateAccountNumber(printvalue,&i));
+    if(!atoi(temp)) return;
+    strcpy(accounts[i].account_no,temp);
     char  withdrawnAmount[100];
     do
     {
         strcpy(withdrawnAmount,validateBalance());
     }
     while(!validateBalance100000(withdrawnAmount)||!validateBalanceExistance(withdrawnAmount,i));
-    askSave();
+    if(!askSave()) return;
     accounts[i].balance-=atof(withdrawnAmount);
     printf("Transaction succeded\nNew Balance:%f\n",accounts[i].balance);
     double withdraw=atof(withdrawnAmount);
@@ -838,20 +853,18 @@ void modify ()
     printer(accounts[i]);
     do
     {
-        printf("What do you want to modify\n1)Name\n2)Mobile\n3)Email\n");
-        int choice;
-        scanf("%d", &choice);
+        printf("What do you want to modify\n1)Name\n2)Mobile\n3)Email\n4)Return to Menu\n");
+        char choice[30];
+        scanf("%s", choice);
         getchar();
-
-
-        switch (choice)
+        switch (atoi(choice))
         {
 
         case 1:
         {
 
             strcpy(accounts[i].name,validationName());
-            askSave();
+            if(!askSave()) return;
             printer(accounts[i]);
             break;
         }
@@ -860,24 +873,25 @@ void modify ()
         {
 
             strcpy(accounts[i].mobile,validateMobile());
-            askSave();
+            if(!askSave()) return;
             printer(accounts[i]);
-
             break;
         }
 
         case 3:
         {
             strcpy(accounts[i].mail,validateEmail());
-            askSave();
+            if(!askSave()) return;
             printer(accounts[i]);
 
             break;
         }
+        case 4:
+            return;
 
         default:
         {
-            printf("Choice not found\n");
+            printf("The Number you entered is not in range\n");
             flag = 0;
         }
         }
@@ -945,9 +959,26 @@ int save()
     printf("\nSaved Successfully\n");
     fclose(file);
 }
-void askSave()
+int askMenu()
 {
-    char choice[10];
+    char choice[30];
+    printf("What do you want\n1)Continue\n2)Return to Menu\n");
+    scanf("%s",choice);
+    getchar();
+    switch(atoi(choice))
+    {
+    case 1:
+        return 0;
+    case 2:
+        return 1;
+    default:
+        printf("The Number you entered is not in range\nTry Again\n");
+        askMenu();
+    }
+}
+int askSave()
+{
+    char choice[30];
     printf("Do you want to save the changes?\n1)Yes\t2)No\n");
     scanf("%s",choice);
     getchar();
@@ -958,10 +989,10 @@ void askSave()
         save();
         break;
     case 2:
-        MENU();
+        return 0;
         break;
     case 3:
-        print("Invalid option");
+        printf("The Number you entered is not in range\nTry Again");
         askSave();
     }
 
@@ -970,25 +1001,29 @@ void askSave()
 int flag_login = 0;
 void MENU()
 {
-    int n;
+    char n[30];
     system("cls");
 
-    while (!flag_login)
+    do
     {
         printf("Enter (1 or 2)\n1.LOGIN\n2.QUIT\n");
-        scanf("%d", &n);
+        scanf("%s", n);
         fflush(stdin);
-        if (n == 2)quit(1);
-        if (n == 1 && login() == 1)flag_login++;
+        if(atoi(n)!=1&&atoi(n)!=2)
+            printf("The Number you entered is not in range\nTRY AGAIN\n");
+        if (atoi(n) == 2) quit(1);
+        if (atoi(n) == 1 && login() == 1)  flag_login++;
+
     }
+    while (!flag_login);
 
     do
     {
 
         printf("Enter a number from (1 to 12)\n1.ADD\n2.DELETE\n3.MODIFY\n4.WITHDRAW\n5.TRANSFER\n6.DEPOSIT\n7.REPORT\n8.QUERY\n9.ADVANCED SEARCH\n10.PRINT\n11.SAVE\n12.QUIT\n");
-        scanf("%d", &n);
+        scanf("%s", n);
         fflush(stdin);
-        switch (n)
+        switch (atoi(n))
         {
         case 1:
             add();
@@ -1032,7 +1067,6 @@ void MENU()
     }
     while(1);
 }
-
 int main()
 {
     MENU();
