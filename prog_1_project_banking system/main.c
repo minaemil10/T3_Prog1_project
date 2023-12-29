@@ -145,6 +145,11 @@ int login()
             loadAccounts();
             return 1;  // Successful login
         }
+        else
+        {
+            printf("Invalid username or password\n");
+            break;
+        }
     }
 
     fclose(file);
@@ -386,11 +391,9 @@ void add()
     time_t t;
     time(&t);
     struct tm *tm_info = localtime(&t);
-
     accounts[i].d_open.month = tm_info->tm_mon + 1;
     accounts[i].d_open.year = tm_info->tm_year + 1900;
     char filename[30] ;
-    sprintf(filename,"%s.txt",accounts[count].account_no);
     FILE *file1=fopen(filename, "w");
     if (file1 == NULL)
     {
@@ -891,7 +894,7 @@ void modify ()
 
         default:
         {
-            printf("The Number you entered is not in range\n");
+            printf("The Number you entered is not in range\nTRY AGAIN\n");
             flag = 0;
         }
         }
