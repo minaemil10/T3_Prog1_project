@@ -26,6 +26,41 @@ typedef struct
     date d_open;
 } user;
 
+void add();
+void advancedSearch();
+int askMenu();
+int askSave();
+int checkName(char*name,int i);
+int checkNumber(char* number);
+int dateCmp(date a, date b);
+void deleteacc();
+void DEPOSIT();
+int loadAccounts();
+int login();
+void MENU();
+void modify ();
+const char* monthName(int month);
+void print();
+void printer(user a);
+void QUERY();
+void quit();
+void report ();
+int save();
+void sortByBalance(user *a,int z);
+void sortByDate(user *a,int z);
+void sortByName(user *a, int z);
+void TRANSFER();
+char* validateAccountNumber(char *printvalue,int *i);
+char* validateBalance();
+int validateBalance100000(char* balance);
+int validateBalanceExistance(char *balance,int i);
+char* validateDuplication(char *printvalue,int i);
+char* validateEmail();
+char* validateMobile();
+char* validationName();
+int WITHDRAW();
+
+
 user accounts[MAX_ACCOUNTS];        //accounts data
 int count = 0;                      //accounts number
 
@@ -167,7 +202,7 @@ int checkNumber(char* number)
 {
     while(*number!='\0')
     {
-        if(!(*number>='0'&& *number<='9'||*number=='.'))
+        if(!((*number>='0')&& (*number<='9')||(*number=='.')))
         {
             printf("Error: Invalid Input number must consist of integers only\n");
             return 0;
