@@ -30,10 +30,14 @@ void add();
 void advancedSearch();
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 int askMenu();
 =======
 void askMenu();
 >>>>>>> parent of dfa064b (save exit solved)
+=======
+int askMenu();
+>>>>>>> parent of 9948629 (conflicting types solved)
 =======
 int askMenu();
 >>>>>>> parent of 9948629 (conflicting types solved)
@@ -253,10 +257,14 @@ char* validateAccountNumber(char *printvalue,int *i)
             printf("Error: Account Number doesn't exist\n");
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
             if(askMenu());
 =======
             askMenu();
 >>>>>>> parent of dfa064b (save exit solved)
+=======
+            if(askMenu());
+>>>>>>> parent of 9948629 (conflicting types solved)
 =======
             if(askMenu());
 >>>>>>> parent of 9948629 (conflicting types solved)
@@ -491,10 +499,14 @@ void TRANSFER()
     char printvalue1[]="Enter the account number to transfer money from: ";
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  char accountNumber1[MAX_ACCOUNT_LENGTH];
 =======
     char accountNumber1[MAX_ACCOUNT_LENGTH];
 >>>>>>> parent of dfa064b (save exit solved)
+=======
+ char accountNumber1[MAX_ACCOUNT_LENGTH];
+>>>>>>> parent of 9948629 (conflicting types solved)
 =======
  char accountNumber1[MAX_ACCOUNT_LENGTH];
 >>>>>>> parent of 9948629 (conflicting types solved)
