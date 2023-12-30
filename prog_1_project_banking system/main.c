@@ -178,7 +178,7 @@ int checkNumber(char* number)
 }
 char* validateAccountNumber(char *printvalue,int *i)
 {
-    int flag=0;
+    int flag=0,flag2=0;
     char* accountNumber = (char*)malloc(MAX_ACCOUNT_LENGTH* sizeof(char));
     do
     {
@@ -200,13 +200,18 @@ char* validateAccountNumber(char *printvalue,int *i)
             }
             else continue;
         }
-        if (!flag)
+         if(strlen(accountNumber)!=10)
+        {
+            printf("Error: Account Number must consist of 10 numbers\n");
+            flag2=1;
+        }
+        else if (!flag)
         {
             printf("Error: Account Number doesn't exist\n");
             if(askMenu()) return "0";
         }
     }
-    while (!flag);
+    while (!flag||!flag2);
     return accountNumber;
 }
 char* validateDuplication(char *printvalue,int i)
@@ -234,14 +239,14 @@ char* validateDuplication(char *printvalue,int i)
             }
             else continue;
         }
-        if (flag1)
-        {
-            printf("Error: Account Number already exist\n");
-        }
-        if(strlen(accountNumber)!=10)
+       if(strlen(accountNumber)!=10)
         {
             printf("Error: Account Number must consist of 10 numbers\n");
             flag2=1;
+        }
+       else if (flag1)
+        {
+            printf("Error: Account Number already exist\n");
         }
     }
     while (flag1||flag2);
@@ -795,32 +800,12 @@ void print()
 }
 void QUERY()
 {
-    char accountNumber[MAX_ACCOUNT_LENGTH];
-    int flag=0;
-    do
-    {
-        printf("Enter the account number: ");
-        scanf("%s",accountNumber);
-        while(!checkNumber(accountNumber))
-        {
-            printf("Enter the account number: ");
-            scanf("%s",accountNumber);
-        }
-
-        for(int i=0; i<count; i++)
-        {
-            if(!strcmp(accountNumber,accounts[i].account_no))
-            {
-                printer(accounts[i]);
-                flag=1;
-                break;
-            }
-            else continue;
-        }
-        if(!flag) printf("Error: Account number doesn't exist\n");  //validate for existing of the account
-    }
-    while(!flag);
-    //MENU();
+    int i;
+    char printvalue[]="Enter account number: ";
+    char temp[MAX_ACCOUNT_LENGTH];
+    strcpy(temp,validateAccountNumber(printvalue,&i));
+    if(!atoi(temp)) return;
+    printer(accounts[i]);
 
 }
 void deleteacc()
