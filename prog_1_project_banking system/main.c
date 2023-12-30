@@ -386,7 +386,11 @@ void add()
 {
     char printvalue[]="Enter account number: ";
     count++;
+<<<<<<< HEAD
     int i=count -1;
+=======
+    int i=count;
+>>>>>>> parent of 087d8d0 (edit)
     strcpy(accounts[i].account_no,validateDuplication(printvalue,i));
     strcpy(accounts[i].name,validationName());
     strcpy(accounts[i].mobile,validateMobile());
