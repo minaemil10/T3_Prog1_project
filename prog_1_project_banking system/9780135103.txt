@@ -1,0 +1,2 @@
+Withdrawn amount from the account: 10000.000000 New Balance: 0.540000
+Withdrawn amount from the account: 0.540000 New Balance: 0.000000

@@ -26,9 +26,8 @@ typedef struct
     date d_open;
 } user;
 
-//user tempHold[MAX_ACCOUNTS];
 user accounts[MAX_ACCOUNTS];        //accounts data
-int count = 0,countTemp = 0;                      //accounts number
+int count = 0;                      //accounts number
 
 int loadAccounts()
 {
@@ -387,7 +386,7 @@ void add()
 {
     char printvalue[]="Enter account number: ";
     count++;
-    int i=count -1;
+    int i=count;
     strcpy(accounts[i].account_no,validateDuplication(printvalue,i));
     strcpy(accounts[i].name,validationName());
     strcpy(accounts[i].mobile,validateMobile());
@@ -401,7 +400,7 @@ void add()
     accounts[i].d_open.year = tm_info->tm_year + 1900;
     char filename[30] ;
     sprintf(filename,"%s.txt",accounts[count].account_no);
-    FILE *file1=fopen(filename, "app+");
+    FILE *file1=fopen(filename, "w");
     if (file1 == NULL)
     {
         printf("Error opening file\n");
@@ -409,6 +408,7 @@ void add()
     }
     fclose(file1);
     if(!askSave()) return;
+    printer(accounts[i]);
 }
 
 void DEPOSIT()
@@ -992,7 +992,7 @@ int askSave()
 
 }
 
-int flag_login = 1;
+int flag_login = 0;
 void MENU()
 {
     char n[30];
@@ -1055,9 +1055,6 @@ void MENU()
         case 12:
             quit(2);
             break;
-       /* case 13:
-            printer(tempHold[countTemp - 1]);
-            break;*/
         default:
             printf("The Number you entered is not in range\nTRY AGAIN\n");
         }
