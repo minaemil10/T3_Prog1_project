@@ -8,7 +8,7 @@
 #define MAX_LINES           100
 #define MAX_USERNAME_LENGTH 50
 #define MAX_PASSWORD_LENGTH 50
-#define MAX_ACCOUNTS        100
+#define MAX_ACCOUNTS        500
 #define MAX_ACCOUNT_LENGTH  50
 #define MAX_Keyword         50
 typedef struct
@@ -45,7 +45,7 @@ void printer(user a);
 void QUERY();
 void quit();
 void report ();
-int save();
+void save();
 void sortByBalance(user *a,int z);
 void sortByDate(user *a,int z);
 void sortByName(user *a, int z);
@@ -58,7 +58,7 @@ char* validateDuplication(char *printvalue,int i);
 char* validateEmail();
 char* validateMobile();
 char* validateName();
-int WITHDRAW();
+void WITHDRAW();
 
 
 user accounts[MAX_ACCOUNTS];        //accounts data
@@ -137,7 +137,7 @@ int loadAccounts()
         if (count >= MAX_ACCOUNTS)
         {
             printf("Maximum account limit reached: %d\n", MAX_ACCOUNTS);
-            break;
+            return 0;
         }
     }
 
@@ -538,7 +538,7 @@ void TRANSFER()
     }
     else MENU();
 }
-int WITHDRAW()
+void WITHDRAW()
 {
     int i;
     char printvalue[]="Enter the account number: ";
@@ -997,7 +997,7 @@ void report ()
 
     fclose(file);
 }
-int save()
+void save()
 {
     const char* filename="accounts.txt";
     int i ;
@@ -1005,7 +1005,7 @@ int save()
     if (file == NULL)
     {
         printf("Error opening file: %s\n", filename);
-        return 0;
+        exit(1);
     }
 
     for(i=0; i<count; i++)
