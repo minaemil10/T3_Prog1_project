@@ -29,7 +29,7 @@ typedef struct
 void add();
 void advancedSearch();
 void askMenu();
-int askSave();
+void askSave();
 int checkName(char*name,int i);
 int checkNumber(char* number);
 int dateCmp(date a, date b);
@@ -449,7 +449,7 @@ void add()
         exit(-1);
     }
     fclose(file1);
-    if(!askSave()) return;
+    askSave();
 }
 
 void DEPOSIT()
@@ -464,7 +464,7 @@ void DEPOSIT()
         strcpy(depositAmount,validateBalance());
     }
     while(!validateBalance100000(depositAmount));
-    if(!askSave()) return;
+    askSave();
     accounts[i].balance+=atof(depositAmount);
     printf("Deposit successful\nNew balance: %f\n",accounts[i].balance);
     double deposit=atof(depositAmount);
@@ -496,7 +496,7 @@ void TRANSFER()
         strcpy(transferAmount,validateBalance());
     }
     while(!validateBalance100000(transferAmount)||!validateBalanceExistance(transferAmount,i));
-    if(!askSave()) return;
+    askSave();
     accounts[i].balance-=atof(transferAmount);
     accounts[j].balance+=atof(transferAmount);  // Update the balances of the source and destination accounts
     printf("Transfer Successful\nNew balance of The source account: %f\nNew balance of The destination account: %f\n",accounts[i].balance,accounts[j].balance);
@@ -529,7 +529,7 @@ int WITHDRAW()
         strcpy(withdrawnAmount,validateBalance());
     }
     while(!validateBalance100000(withdrawnAmount)||!validateBalanceExistance(withdrawnAmount,i));
-    if(!askSave()) return;
+    askSave();
     accounts[i].balance-=atof(withdrawnAmount);
     printf("Transaction succeded\nNew Balance:%f\n",accounts[i].balance);
     double withdraw=atof(withdrawnAmount);
@@ -869,6 +869,7 @@ void modify ()
     strcpy(accountNumber,validateAccountNumber(printvalue,&i));
     int flag=1;
     printer(accounts[i]);
+    char temp[MAX_ACCOUNT_LENGTH];
     do
     {
         printf("What do you want to modify\n1)Name\n2)Mobile\n3)Email\n4)Return to Menu\n");
@@ -882,7 +883,7 @@ void modify ()
         {
 
             strcpy(accounts[i].name,validationName());
-            if(!askSave()) return;
+            askSave();
             printer(accounts[i]);
             break;
         }
@@ -891,7 +892,7 @@ void modify ()
         {
 
             strcpy(accounts[i].mobile,validateMobile());
-            if(!askSave()) return;
+            askSave();
             printer(accounts[i]);
             break;
         }
@@ -899,7 +900,7 @@ void modify ()
         case 3:
         {
             strcpy(accounts[i].mail,validateEmail());
-            if(!askSave()) return;
+            askSave();
             printer(accounts[i]);
 
             break;
@@ -992,7 +993,7 @@ void askMenu()
         askMenu();
     }
 }
-int askSave()
+void askSave()
 {
     char choice[30];
     printf("Do you want to save the changes?\n1)Yes\t2)No\n");
@@ -1003,10 +1004,8 @@ int askSave()
     {
     case 1:
         save();
-        break;
     case 2:
-        return 0;
-        break;
+        MENU();
     case 3:
         printf("The Number you entered is not in range\nTry Again");
         askSave();
