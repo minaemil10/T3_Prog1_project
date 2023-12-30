@@ -82,7 +82,7 @@ int loadAccounts()
         if (token == NULL)
         {
             printf("Invalid file format: %s\n", filename);
-            break;
+            exit(1);
         }
         strcpy(accounts[count].account_no,token);
 
@@ -90,7 +90,7 @@ int loadAccounts()
         if (token == NULL)
         {
             printf("Invalid file format: %s\n", filename);
-            break;
+            exit(1);
         }
         strcpy(accounts[count].name, token);
 
@@ -98,7 +98,7 @@ int loadAccounts()
         if (token == NULL)
         {
             printf("Invalid file format: %s\n", filename);
-            break;
+            exit(1);
         }
         strcpy(accounts[count].mail, token);
 
@@ -106,7 +106,7 @@ int loadAccounts()
         if (token == NULL)
         {
             printf("Invalid file format: %s\n", filename);
-            break;
+            exit(1);
         }
         accounts[count].balance = atof(token);
 
@@ -114,7 +114,7 @@ int loadAccounts()
         if (token == NULL)
         {
             printf("Invalid file format: %s\n", filename);
-            break;
+            exit(1);
         }
         strcpy(accounts[count].mobile, token);
 
@@ -122,7 +122,7 @@ int loadAccounts()
         if (token == NULL)
         {
             printf("Invalid file format: %s\n", filename);
-            break;
+            exit(1);
         }
 
         accounts[count].d_open.month=atoi(token);
@@ -130,7 +130,7 @@ int loadAccounts()
         if (token == NULL)
         {
             printf("Invalid file format: %s\n", filename);
-            break;
+            exit(1);
         }
         accounts[count].d_open.year = atoi(token);
         count++;
@@ -182,8 +182,9 @@ int login()
         }
         else
         {
+            system("cls");
             printf("Invalid username or password\n");
-            break;
+            return 0;
         }
     }
 
@@ -195,8 +196,14 @@ void quit()
     printf("Are you sure thet you want to exit?\n1)yes                  2)no\n");
     int val;
     scanf("%d",&val);
+    fflush(stdin);
     if(val==1)
         exit(1);
+    if(val==2){
+        system("cls");
+        return 0;
+        }
+    else{system("cls");printf("The Number you entered is not in range\nTRY AGAIN\n");quit();};
 }
 int checkNumber(char* number)
 {
@@ -1071,6 +1078,7 @@ void MENU()
             quit(2);
             break;
         default:
+            system("cls");
             printf("The Number you entered is not in range\nTRY AGAIN\n");
         }
     }
