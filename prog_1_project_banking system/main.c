@@ -386,7 +386,7 @@ void add()
 {
     char printvalue[]="Enter account number: ";
     count++;
-    int i=count;
+    int i=count -1;
     strcpy(accounts[i].account_no,validateDuplication(printvalue,i));
     strcpy(accounts[i].name,validationName());
     strcpy(accounts[i].mobile,validateMobile());
@@ -408,7 +408,6 @@ void add()
     }
     fclose(file1);
     if(!askSave()) return;
-    printer(accounts[i]);
 }
 
 void DEPOSIT()
@@ -937,7 +936,7 @@ int save()
 {
     const char* filename="accounts.txt";
     int i ;
-    FILE* file = fopen(filename, "w+");
+    FILE* file = fopen(filename, "a");
     if (file == NULL)
     {
         printf("Error opening file: %s\n", filename);
