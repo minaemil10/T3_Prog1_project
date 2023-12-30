@@ -28,7 +28,7 @@ typedef struct
 
 void add();
 void advancedSearch();
-void askMenu();
+int askMenu();
 int askSave();
 int checkName(char*name,int i);
 int checkNumber(char* number);
@@ -243,7 +243,7 @@ char* validateAccountNumber(char *printvalue,int *i)
         else if (!flag)
         {
             printf("Error: Account Number doesn't exist\n");
-            askMenu();
+            if(askMenu());
         }
     }
     while (!flag||flag2);
@@ -473,7 +473,7 @@ void TRANSFER()
 {
     int i,j;
     char printvalue1[]="Enter the account number to transfer money from: ";
-    char accountNumber1[MAX_ACCOUNT_LENGTH];
+ char accountNumber1[MAX_ACCOUNT_LENGTH];
     strcpy(accountNumber1,validateAccountNumber(printvalue1,&i));
     char printvalue2[]="Enter the account number to transfer money to: ";
     char accountNumber2[MAX_ACCOUNT_LENGTH];
