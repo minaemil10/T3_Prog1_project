@@ -26,7 +26,6 @@ typedef struct
     date d_open;
 } user;
 
-<<<<<<< HEAD
 void add();
 void advancedSearch();
 int askMenu();
@@ -62,8 +61,6 @@ char* validationName();
 int WITHDRAW();
 
 
-=======
->>>>>>> dfa064b8f43ef9dbdd906ce36f50b0c37a23fb92
 user accounts[MAX_ACCOUNTS];        //accounts data
 int count = 0;                      //accounts number
 
@@ -75,7 +72,7 @@ int loadAccounts()
     if (file == NULL)
     {
         printf("Error opening file: %s\n", filename);
-        exit(1);
+        return 0;
     }
     char line[400];
     while (fgets(line, sizeof(line), file) != NULL)
@@ -85,7 +82,7 @@ int loadAccounts()
         if (token == NULL)
         {
             printf("Invalid file format: %s\n", filename);
-            exit(1);
+            break;
         }
         strcpy(accounts[count].account_no,token);
 
@@ -93,7 +90,7 @@ int loadAccounts()
         if (token == NULL)
         {
             printf("Invalid file format: %s\n", filename);
-            exit(1);
+            break;
         }
         strcpy(accounts[count].name, token);
 
@@ -101,7 +98,7 @@ int loadAccounts()
         if (token == NULL)
         {
             printf("Invalid file format: %s\n", filename);
-            exit(1);
+            break;
         }
         strcpy(accounts[count].mail, token);
 
@@ -109,7 +106,7 @@ int loadAccounts()
         if (token == NULL)
         {
             printf("Invalid file format: %s\n", filename);
-            exit(1);
+            break;
         }
         accounts[count].balance = atof(token);
 
@@ -117,7 +114,7 @@ int loadAccounts()
         if (token == NULL)
         {
             printf("Invalid file format: %s\n", filename);
-            exit(1);
+            break;
         }
         strcpy(accounts[count].mobile, token);
 
@@ -125,7 +122,7 @@ int loadAccounts()
         if (token == NULL)
         {
             printf("Invalid file format: %s\n", filename);
-            exit(1);
+            break;
         }
 
         accounts[count].d_open.month=atoi(token);
@@ -133,7 +130,7 @@ int loadAccounts()
         if (token == NULL)
         {
             printf("Invalid file format: %s\n", filename);
-            exit(1);
+            break;
         }
         accounts[count].d_open.year = atoi(token);
         count++;
@@ -185,9 +182,8 @@ int login()
         }
         else
         {
-            system("cls");
             printf("Invalid username or password\n");
-            return 0;
+            break;
         }
     }
 
@@ -199,20 +195,14 @@ void quit()
     printf("Are you sure thet you want to exit?\n1)yes                  2)no\n");
     int val;
     scanf("%d",&val);
-    fflush(stdin);
     if(val==1)
         exit(1);
-    if(val==2){
-        system("cls");
-        return 0;
-        }
-    else{system("cls");printf("The Number you entered is not in range\nTRY AGAIN\n");quit();};
 }
 int checkNumber(char* number)
 {
     while(*number!='\0')
     {
-        if(!(*number>='0'&& *number<='9'||*number=='.'))
+        if(!((*number>='0')&& (*number<='9')||(*number=='.')))
         {
             printf("Error: Invalid Input number must consist of integers only\n");
             return 0;
@@ -253,14 +243,10 @@ char* validateAccountNumber(char *printvalue,int *i)
         else if (!flag)
         {
             printf("Error: Account Number doesn't exist\n");
-<<<<<<< HEAD
             if(askMenu());
-=======
-            if(askMenu()) return "0";
->>>>>>> dfa064b8f43ef9dbdd906ce36f50b0c37a23fb92
         }
     }
-    while (!flag||!flag2);
+    while (!flag||flag2);
     return accountNumber;
 }
 char* validateDuplication(char *printvalue,int i)
@@ -464,10 +450,7 @@ void DEPOSIT()
     int i;
     char printvalue[]="Enter the account number: ";
     char accountNumber[MAX_ACCOUNT_LENGTH];
-    char temp[MAX_ACCOUNT_LENGTH];
-    strcpy(temp,validateAccountNumber(printvalue,&i));
-    if(!atoi(temp)) return;
-    strcpy(accounts[i].account_no,temp);
+    strcpy(accountNumber,validateAccountNumber(printvalue,&i));
     char  depositAmount[100];
     do
     {
@@ -490,28 +473,15 @@ void TRANSFER()
 {
     int i,j;
     char printvalue1[]="Enter the account number to transfer money from: ";
-<<<<<<< HEAD
  char accountNumber1[MAX_ACCOUNT_LENGTH];
     strcpy(accountNumber1,validateAccountNumber(printvalue1,&i));
-=======
-    char accountNumber1[MAX_ACCOUNT_LENGTH];
-    char temp1[MAX_ACCOUNT_LENGTH];
-    strcpy(temp1,validateAccountNumber(printvalue1,&i));
-    if(!atoi(temp1)) return;
-    strcpy(accounts[i].account_no,temp1);
->>>>>>> dfa064b8f43ef9dbdd906ce36f50b0c37a23fb92
     char printvalue2[]="Enter the account number to transfer money to: ";
     char accountNumber2[MAX_ACCOUNT_LENGTH];
-    char temp2[MAX_ACCOUNT_LENGTH];
-    strcpy(temp2,validateAccountNumber(printvalue2,&j));
-    if(!atoi(temp2)) return;
-    strcpy(accounts[i].account_no,temp2);
+    strcpy(accountNumber2,validateAccountNumber(printvalue2,&j));
     while(atof(accountNumber1)==atof(accountNumber2))
     {
         printf("Error: You can't transfer money to the same account\n");
-        strcpy(temp2,validateAccountNumber(printvalue2,&j));
-        if(!atoi(temp2)) return;
-        strcpy(accounts[i].account_no,temp2);
+    strcpy(accountNumber2,validateAccountNumber(printvalue2,&j));
     }
     char  transferAmount[100];
     do
@@ -544,11 +514,8 @@ int WITHDRAW()
 {
     int i;
     char printvalue[]="Enter the account number: ";
-    char accountNumber[MAX_ACCOUNT_LENGTH];
-    char temp[MAX_ACCOUNT_LENGTH];
-    strcpy(temp,validateAccountNumber(printvalue,&i));
-    if(!atoi(temp)) return;
-    strcpy(accounts[i].account_no,temp);
+   char accountNumber[MAX_ACCOUNT_LENGTH];
+    strcpy(accountNumber,validateAccountNumber(printvalue,&i));
     char  withdrawnAmount[100];
     do
     {
@@ -855,9 +822,7 @@ void QUERY()
 {
     int i;
     char printvalue[]="Enter account number: ";
-    char temp[MAX_ACCOUNT_LENGTH];
-    strcpy(temp,validateAccountNumber(printvalue,&i));
-    if(!atoi(temp)) return;
+    validateAccountNumber(printvalue,&i);
     printer(accounts[i]);
 
 }
@@ -893,10 +858,8 @@ void modify ()
 {
     int i;
     char printvalue[]="Enter account number: ";
-    char temp[MAX_ACCOUNT_LENGTH];
-    strcpy(temp,validateAccountNumber(printvalue,&i));
-    if(!atoi(temp)) return;
-    strcpy(accounts[i].account_no,temp);
+    char accountNumber[MAX_ACCOUNT_LENGTH];
+    strcpy(accountNumber,validateAccountNumber(printvalue,&i));
     int flag=1;
     printer(accounts[i]);
     do
@@ -950,8 +913,7 @@ void report ()
 {
     int i;
     char printvalue[]="Enter account number: ";
-
-    strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
+     strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
     char filename[30];
     sprintf(filename,"%s.txt",accounts[i].account_no);
     FILE *file1=fopen(filename, "a");
@@ -986,7 +948,7 @@ void report ()
 
     fclose(file);
 }
-void save()
+int save()
 {
     const char* filename="accounts.txt";
     int i ;
@@ -994,7 +956,7 @@ void save()
     if (file == NULL)
     {
         printf("Error opening file: %s\n", filename);
-        exit(1);
+        return 0;
     }
 
     for(i=0; i<count; i++)
@@ -1006,7 +968,7 @@ void save()
     printf("\nSaved Successfully\n");
     fclose(file);
 }
-int askMenu()
+void askMenu()
 {
     char choice[30];
     printf("What do you want\n1)Continue\n2)Return to Menu\n");
@@ -1015,9 +977,9 @@ int askMenu()
     switch(atoi(choice))
     {
     case 1:
-        return 0;
+        return;
     case 2:
-        return 1;
+        MENU();
     default:
         printf("The Number you entered is not in range\nTry Again\n");
         askMenu();
@@ -1050,8 +1012,8 @@ void MENU()
 {
     char n[30];
     system("cls");
+ while (!flag_login)
 
-    while(!flag_login)
     {
         printf("Enter (1 or 2)\n1.LOGIN\n2.QUIT\n");
         scanf("%s", n);
@@ -1062,8 +1024,11 @@ void MENU()
         if (atoi(n) == 1 && login() == 1)  flag_login++;
 
     }
+
+
     do
     {
+
         printf("Enter a number from (1 to 12)\n1.ADD\n2.DELETE\n3.MODIFY\n4.WITHDRAW\n5.TRANSFER\n6.DEPOSIT\n7.REPORT\n8.QUERY\n9.ADVANCED SEARCH\n10.PRINT\n11.SAVE\n12.QUIT\n");
         scanf("%s", n);
         fflush(stdin);
@@ -1106,7 +1071,6 @@ void MENU()
             quit(2);
             break;
         default:
-            system("cls");
             printf("The Number you entered is not in range\nTRY AGAIN\n");
         }
     }
