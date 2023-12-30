@@ -977,8 +977,10 @@ void report ()
     char buffer[MAX_LINES][MAX_LEN];
     while(!feof(file))
         if(fgets(buffer[no_line],MAX_LEN,file)!=NULL)no_line++;
+    if(no_line==0)
+            printf("No transactions happened on this account\n");
 
-    if(no_line>=5)
+    else if(no_line>=5)
     {
         for(int i=0; i<5; i++)
         {
