@@ -29,10 +29,14 @@ typedef struct
 void add();
 void advancedSearch();
 <<<<<<< HEAD
+<<<<<<< HEAD
 int askMenu();
 =======
 void askMenu();
 >>>>>>> parent of dfa064b (save exit solved)
+=======
+int askMenu();
+>>>>>>> parent of 9948629 (conflicting types solved)
 int askSave();
 int checkName(char*name,int i);
 int checkNumber(char* number);
@@ -248,10 +252,14 @@ char* validateAccountNumber(char *printvalue,int *i)
         {
             printf("Error: Account Number doesn't exist\n");
 <<<<<<< HEAD
+<<<<<<< HEAD
             if(askMenu());
 =======
             askMenu();
 >>>>>>> parent of dfa064b (save exit solved)
+=======
+            if(askMenu());
+>>>>>>> parent of 9948629 (conflicting types solved)
         }
     }
     while (!flag||flag2);
@@ -482,10 +490,14 @@ void TRANSFER()
     int i,j;
     char printvalue1[]="Enter the account number to transfer money from: ";
 <<<<<<< HEAD
+<<<<<<< HEAD
  char accountNumber1[MAX_ACCOUNT_LENGTH];
 =======
     char accountNumber1[MAX_ACCOUNT_LENGTH];
 >>>>>>> parent of dfa064b (save exit solved)
+=======
+ char accountNumber1[MAX_ACCOUNT_LENGTH];
+>>>>>>> parent of 9948629 (conflicting types solved)
     strcpy(accountNumber1,validateAccountNumber(printvalue1,&i));
     char printvalue2[]="Enter the account number to transfer money to: ";
     char accountNumber2[MAX_ACCOUNT_LENGTH];
