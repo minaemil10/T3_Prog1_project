@@ -199,11 +199,17 @@ void quit()
     fflush(stdin);
     if(val==1)
         exit(1);
-    if(val==2){
+    if(val==2)
+    {
         system("cls");
         return 0;
-        }
-    else{system("cls");printf("The Number you entered is not in range\nTRY AGAIN\n");quit();};
+    }
+    else
+    {
+        system("cls");
+        printf("The Number you entered is not in range\nTRY AGAIN\n");
+        quit();
+    };
 }
 int checkNumber(char* number)
 {
@@ -242,7 +248,7 @@ char* validateAccountNumber(char *printvalue,int *i)
             }
             else continue;
         }
-         if(strlen(accountNumber)!=10)
+        if(strlen(accountNumber)!=10)
         {
             printf("Error: Account Number must consist of 10 numbers\n");
             flag2=1;
@@ -281,12 +287,12 @@ char* validateDuplication(char *printvalue,int i)
             }
             else continue;
         }
-       if(strlen(accountNumber)!=10)
+        if(strlen(accountNumber)!=10)
         {
             printf("Error: Account Number must consist of 10 numbers\n");
             flag2=1;
         }
-       else if (flag1)
+        else if (flag1)
         {
             printf("Error: Account Number already exist\n");
         }
@@ -428,13 +434,12 @@ void add()
 {
     char printvalue[]="Enter account number: ";
     count++;
-    int i=count -1;
+    int i=count-1;
     strcpy(accounts[i].account_no,validateDuplication(printvalue,i));
     strcpy(accounts[i].name,validationName());
     strcpy(accounts[i].mobile,validateMobile());
     strcpy(accounts[i].mail,validateEmail());
     accounts[i].balance=atof(validateBalance());
-
     time_t t;
     time(&t);
     struct tm *tm_info = localtime(&t);
@@ -465,18 +470,21 @@ void DEPOSIT()
     }
     while(!validateBalance100000(depositAmount));
     if(askSave)
-    save();
-    else MENU();
-    accounts[i].balance+=atof(depositAmount);
-    printf("Deposit successful\nNew balance: %f\n",accounts[i].balance);
-    double deposit=atof(depositAmount);
-    FILE* file = fopen(strcat(accountNumber,".txt"), "a");
-    if (file == NULL)
     {
-        printf("Error opening file");
+        accounts[i].balance+=atof(depositAmount);
+        printf("Deposit successful\nNew balance: %f\n",accounts[i].balance);
+        double deposit=atof(depositAmount);
+        FILE* file = fopen(strcat(accountNumber,".txt"), "a");
+        if (file == NULL)
+        {
+            printf("Error opening file");
+        }
+        fprintf(file, "Depositted amount to the account: %f New balance: %f\n", deposit,accounts[i].balance);
+        fclose(file);
+        save();
     }
-    fprintf(file, "Depositted amount to the account: %f New balance: %f\n", deposit,accounts[i].balance);
-    fclose(file);
+    else MENU();
+
 }
 void TRANSFER()
 {
@@ -490,7 +498,7 @@ void TRANSFER()
     while(atof(accountNumber1)==atof(accountNumber2))
     {
         printf("Error: You can't transfer money to the same account\n");
-    strcpy(accountNumber2,validateAccountNumber(printvalue2,&j));
+        strcpy(accountNumber2,validateAccountNumber(printvalue2,&j));
     }
     char  transferAmount[100];
     do
@@ -499,33 +507,35 @@ void TRANSFER()
     }
     while(!validateBalance100000(transferAmount)||!validateBalanceExistance(transferAmount,i));
     if(askSave)
-    save();
-    else MENU();
-    accounts[i].balance-=atof(transferAmount);
-    accounts[j].balance+=atof(transferAmount);  // Update the balances of the source and destination accounts
-    printf("Transfer Successful\nNew balance of The source account: %f\nNew balance of The destination account: %f\n",accounts[i].balance,accounts[j].balance);
-    double transfer=atof(transferAmount);
-    FILE* file1 = fopen(strcat(accountNumber1,".txt"), "a");
-    if (file1 == NULL)
     {
-        printf("Error opening file");
-    }
-    fprintf(file1, "Transferred amount from the account: %f New Balance: %f\n",transfer,accounts[i].balance);
-    FILE* file2 = fopen(strcat(accountNumber2,".txt"), "a");
-    if (file2 == NULL)
-    {
-        printf("Error opening file");
-    }
+        accounts[i].balance-=atof(transferAmount);
+        accounts[j].balance+=atof(transferAmount);  // Update the balances of the source and destination accounts
+        printf("Transfer Successful\nNew balance of The source account: %f\nNew balance of The destination account: %f\n",accounts[i].balance,accounts[j].balance);
+        double transfer=atof(transferAmount);
+        FILE* file1 = fopen(strcat(accountNumber1,".txt"), "a");
+        if (file1 == NULL)
+        {
+            printf("Error opening file");
+        }
+        fprintf(file1, "Transferred amount from the account: %f New Balance: %f\n",transfer,accounts[i].balance);
+        FILE* file2 = fopen(strcat(accountNumber2,".txt"), "a");
+        if (file2 == NULL)
+        {
+            printf("Error opening file");
+        }
 
-    fprintf(file2, "Transferred amount to the account: %f New Balance: %f\n",transfer,accounts[j].balance);
-    fclose(file1);
-    fclose(file2);
+        fprintf(file2, "Transferred amount to the account: %f New Balance: %f\n",transfer,accounts[j].balance);
+        fclose(file1);
+        fclose(file2);
+        save();
+    }
+    else MENU();
 }
 int WITHDRAW()
 {
     int i;
     char printvalue[]="Enter the account number: ";
-   char accountNumber[MAX_ACCOUNT_LENGTH];
+    char accountNumber[MAX_ACCOUNT_LENGTH];
     strcpy(accountNumber,validateAccountNumber(printvalue,&i));
     char  withdrawnAmount[100];
     do
@@ -534,9 +544,8 @@ int WITHDRAW()
     }
     while(!validateBalance100000(withdrawnAmount)||!validateBalanceExistance(withdrawnAmount,i));
     if(askSave)
-    save();
-    else MENU();
-    accounts[i].balance-=atof(withdrawnAmount);
+    {
+       accounts[i].balance-=atof(withdrawnAmount);
     printf("Transaction succeded\nNew Balance:%f\n",accounts[i].balance);
     double withdraw=atof(withdrawnAmount);
     FILE* file = fopen(strcat(accountNumber,".txt"), "a");
@@ -548,6 +557,10 @@ int WITHDRAW()
     fprintf(file, "Withdrawn amount from the account: %f New Balance: %f\n",withdraw,accounts[i].balance);
 
     fclose(file);
+       save();
+    }
+    else MENU();
+
 }
 void advancedSearch()
 {
@@ -908,7 +921,6 @@ void modify ()
             strcpy(accounts[i].mail,validateEmail());
             askSave();
             printer(accounts[i]);
-
             break;
         }
         case 4:
@@ -927,7 +939,7 @@ void report ()
 {
     int i;
     char printvalue[]="Enter account number: ";
-     strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
+    strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
     char filename[30];
     sprintf(filename,"%s.txt",accounts[i].account_no);
     FILE *file1=fopen(filename, "a");
@@ -944,9 +956,6 @@ void report ()
     char buffer[MAX_LINES][MAX_LEN];
     while(!feof(file))
         if(fgets(buffer[no_line],MAX_LEN,file)!=NULL)no_line++;
-
-        if(no_line==0)
-            printf("No transactions happened on this account\n");
 
     if(no_line>=5)
     {
@@ -1027,7 +1036,7 @@ void MENU()
 {
     char n[30];
     system("cls");
- while (!flag_login)
+    while (!flag_login)
 
     {
         printf("Enter (1 or 2)\n1.LOGIN\n2.QUIT\n");
@@ -1097,4 +1106,5 @@ int main()
     MENU();
     return 0;
 }
+
 
