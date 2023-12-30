@@ -449,9 +449,6 @@ void add()
     if(askSave())
     {
         accounts[i]=temp;
-        save();
-    }
-    else MENU();
     char filename[30] ;
     sprintf(filename,"%s.txt",accounts[count].account_no);
     FILE *file1=fopen(filename, "w");
@@ -461,7 +458,9 @@ void add()
         exit(1);
     }
     fclose(file1);
-    askSave();
+        save();
+    }
+    else MENU();
 }
 
 void DEPOSIT()
