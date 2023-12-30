@@ -72,7 +72,7 @@ int loadAccounts()
     if (file == NULL)
     {
         printf("Error opening file: %s\n", filename);
-        return 0;
+        exit(1);
     }
     char line[400];
     while (fgets(line, sizeof(line), file) != NULL)
@@ -160,7 +160,7 @@ int login()
     if (file == NULL)
     {
         printf("Error opening file: users.txt\n");
-        return 0;
+        exit(1);
     }
 
     char line[MAX_USERNAME_LENGTH + MAX_PASSWORD_LENGTH + 2];  // +2 for space and null
@@ -537,7 +537,7 @@ int WITHDRAW()
     if (file == NULL)
     {
         printf("Error opening file");
-        return 0;
+        exit(1);
     }
     fprintf(file, "Withdrawn amount from the account: %f New Balance: %f\n",withdraw,accounts[i].balance);
 
@@ -931,7 +931,7 @@ void report ()
     if (file== NULL)
     {
         printf("Error opening file\n");
-        exit(-1);
+        exit(1);
     }
 
     int no_line=0;
