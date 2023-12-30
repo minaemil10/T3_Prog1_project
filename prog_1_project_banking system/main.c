@@ -828,7 +828,10 @@ void deleteacc()
     int i,flag=0;
     char printvalue[]="Enter account number: ";
 
-    strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
+    char temp[MAX_ACCOUNT_LENGTH];
+    strcpy(temp,validateAccountNumber(printvalue,&i));
+    if(!atoi(temp)) return;
+    strcpy(accounts[i].account_no,temp);
 
     if(accounts[i].balance!=0)
     {
