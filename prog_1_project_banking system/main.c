@@ -29,7 +29,42 @@ typedef struct
 user accounts[MAX_ACCOUNTS];        //accounts data
 int count = 0;                      //accounts number
 
+int askMenu()
+{
+    char choice[30];
+    printf("What do you want\n1)Continue\n2)Return to Menu\n");
+    scanf("%s",choice);
+    getchar();
+    switch(atoi(choice))
+    {
+    case 1:
+        return 0;
+    case 2:
+        return 1;
+    default:
+        printf("The Number you entered is not in range\nTry Again\n");
+        askMenu();
+    }
+}
+int askSave()
+{
+    char choice[30];
+    printf("Do you want to save the changes?\n1)Yes\t2)No\n");
+    scanf("%s",choice);
+    getchar();
 
+    switch(atoi(choice))
+    {
+    case 1:
+        save();
+        break;
+    case 2:
+        return 0;
+        break;
+    case 3:
+        printf("The Number you entered is not in range\nTry Again");
+        askSave();
+    }
 
 
 int loadAccounts()
@@ -166,43 +201,6 @@ void quit()
     if(val==1)
         exit(1);
 }
-
-int askMenu()
-{
-    char choice[30];
-    printf("What do you want\n1)Continue\n2)Return to Menu\n");
-    scanf("%s",choice);
-    getchar();
-    switch(atoi(choice))
-    {
-    case 1:
-        return 0;
-    case 2:
-        return 1;
-    default:
-        printf("The Number you entered is not in range\nTry Again\n");
-        askMenu();
-    }
-}
-int askSave()
-{
-    char choice[30];
-    printf("Do you want to save the changes?\n1)Yes\t2)No\n");
-    scanf("%s",choice);
-    getchar();
-
-    switch(atoi(choice))
-    {
-    case 1:
-        save();
-        break;
-    case 2:
-        return 0;
-        break;
-    case 3:
-        printf("The Number you entered is not in range\nTry Again");
-        askSave();
-    }
 int checkNumber(char* number)
 {
     while(*number!='\0')
