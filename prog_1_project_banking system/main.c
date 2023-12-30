@@ -435,16 +435,23 @@ void add()
     char printvalue[]="Enter account number: ";
     count++;
     int i=count-1;
-    strcpy(accounts[i].account_no,validateDuplication(printvalue,i));
-    strcpy(accounts[i].name,validationName());
-    strcpy(accounts[i].mobile,validateMobile());
-    strcpy(accounts[i].mail,validateEmail());
-    accounts[i].balance=atof(validateBalance());
+    user temp;
+    strcpy(temp.account_no,validateDuplication(printvalue,i));
+    strcpy(temp.name,validationName());
+    strcpy(temp.mobile,validateMobile());
+    strcpy(temp.mail,validateEmail());
+    temp.balance=atof(validateBalance());
     time_t t;
     time(&t);
     struct tm *tm_info = localtime(&t);
-    accounts[i].d_open.month = tm_info->tm_mon + 1;
-    accounts[i].d_open.year = tm_info->tm_year + 1900;
+    temp.d_open.month = tm_info->tm_mon + 1;
+    temp.d_open.year = tm_info->tm_year + 1900;
+    if(askSave())
+    {
+        accounts[i]=temp;
+        save();
+    }
+    else MENU();
     char filename[30] ;
     sprintf(filename,"%s.txt",accounts[count].account_no);
     FILE *file1=fopen(filename, "w");
