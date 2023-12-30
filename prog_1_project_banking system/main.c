@@ -386,7 +386,7 @@ void add()
 {
     char printvalue[]="Enter account number: ";
     count++;
-    int i=count;
+    int i=count-1;
     strcpy(accounts[i].account_no,validateDuplication(printvalue,i));
     strcpy(accounts[i].name,validationName());
     strcpy(accounts[i].mobile,validateMobile());
