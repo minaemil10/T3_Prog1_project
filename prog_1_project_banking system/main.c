@@ -840,7 +840,10 @@ void modify ()
 {
     int i;
     char printvalue[]="Enter account number: ";
-    strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
+    char temp[MAX_ACCOUNT_LENGTH];
+    strcpy(temp,validateAccountNumber(printvalue,&i));
+    if(!atoi(temp)) return;
+    strcpy(accounts[i].account_no,temp);
     int flag=1;
     printer(accounts[i]);
     do
