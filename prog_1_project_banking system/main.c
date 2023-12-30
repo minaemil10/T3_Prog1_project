@@ -29,6 +29,44 @@ typedef struct
 user accounts[MAX_ACCOUNTS];        //accounts data
 int count = 0;                      //accounts number
 
+int askMenu()
+{
+    char choice[30];
+    printf("What do you want\n1)Continue\n2)Return to Menu\n");
+    scanf("%s",choice);
+    getchar();
+    switch(atoi(choice))
+    {
+    case 1:
+        return 0;
+    case 2:
+        return 1;
+    default:
+        printf("The Number you entered is not in range\nTry Again\n");
+        askMenu();
+    }
+}
+int askSave()
+{
+    char choice[30];
+    printf("Do you want to save the changes?\n1)Yes\t2)No\n");
+    scanf("%s",choice);
+    getchar();
+
+    switch(atoi(choice))
+    {
+    case 1:
+        save();
+        break;
+    case 2:
+        return 0;
+        break;
+    case 3:
+        printf("The Number you entered is not in range\nTry Again");
+        askSave();
+    }
+
+
 int loadAccounts()
 {
     count =0;
@@ -407,7 +445,19 @@ void add()
         exit(-1);
     }
     fclose(file1);
-    if(!askSave()) return;
+    if(!askSave())
+    {
+         for( i; i<count-1; i++)
+        {
+            accounts[i]=accounts[i+1];
+        }
+        count--;
+        save();
+    }
+    else
+    {
+        printer(accounts[i]);
+    }
 }
 
 void DEPOSIT()
@@ -952,42 +1002,6 @@ int save()
     printf("\nSaved Successfully\n");
     fclose(file);
 }
-int askMenu()
-{
-    char choice[30];
-    printf("What do you want\n1)Continue\n2)Return to Menu\n");
-    scanf("%s",choice);
-    getchar();
-    switch(atoi(choice))
-    {
-    case 1:
-        return 0;
-    case 2:
-        return 1;
-    default:
-        printf("The Number you entered is not in range\nTry Again\n");
-        askMenu();
-    }
-}
-int askSave()
-{
-    char choice[30];
-    printf("Do you want to save the changes?\n1)Yes\t2)No\n");
-    scanf("%s",choice);
-    getchar();
-
-    switch(atoi(choice))
-    {
-    case 1:
-        save();
-        break;
-    case 2:
-        return 0;
-        break;
-    case 3:
-        printf("The Number you entered is not in range\nTry Again");
-        askSave();
-    }
 
 }
 
