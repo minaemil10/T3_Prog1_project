@@ -143,6 +143,7 @@ int loadAccounts()
 
     fclose(file);
 }
+
 int login()
 {
     char username[MAX_USERNAME_LENGTH];
@@ -191,6 +192,7 @@ int login()
     fclose(file);
     return 0;
 }
+
 void quit()
 {
     printf("Are you sure thet you want to exit?\n1)yes                  2)no\n");
@@ -211,6 +213,7 @@ void quit()
         quit();
     };
 }
+
 int checkNumber(char* number)
 {
     while(*number!='\0')
@@ -224,6 +227,7 @@ int checkNumber(char* number)
     }
     return 1;
 }
+
 char* validateAccountNumber(char *printvalue,int *i)
 {
     int flag=0,flag2=0;
@@ -263,6 +267,7 @@ char* validateAccountNumber(char *printvalue,int *i)
     while (!flag||flag2);
     return accountNumber;
 }
+
 char* validateDuplication(char *printvalue,int i)
 {
     int flag1=0,flag2=0;
@@ -301,12 +306,14 @@ char* validateDuplication(char *printvalue,int i)
     while (flag1||flag2);
     return accountNumber;
 }
+
 int checkName(char*name,int i)
 {
     if(name[i]>='a'&& name[i]<= 'z'||(name[i] >='A'&& name[i] <='Z'))
         return 1;
     else return 0;
 }
+
 char* validateName()
 {
     int flag,countSpace=0;
@@ -338,6 +345,7 @@ char* validateName()
     while (!flag||countSpace<1);
     return name;
 }
+
 char* validateEmail()
 {
     char* email = (char*)malloc(100* sizeof(char));
@@ -376,6 +384,7 @@ char* validateEmail()
     while (!flag_mail||!flag);
     return email;
 }
+
 char* validateBalance()
 {
     char* balance = (char*)malloc(100* sizeof(char));
@@ -388,6 +397,7 @@ char* validateBalance()
     while (!checkNumber(balance));
     return balance;
 }
+
 char* validateMobile()
 {
     char* mobileNumber = (char*)malloc(15* sizeof(char));
@@ -413,6 +423,7 @@ char* validateMobile()
     while(flag);
     return mobileNumber;
 }
+
 int validateBalanceExistance(char *balance,int i)
 {
     if(atof(balance)>accounts[i].balance)
@@ -422,6 +433,7 @@ int validateBalanceExistance(char *balance,int i)
     }
     else return 1;
 }
+
 int validateBalance100000(char* balance)
 {
     if(atof(balance)>10000.0)
@@ -431,6 +443,7 @@ int validateBalance100000(char* balance)
     }
     else return 1;
 }
+
 void add()
 {
     char printvalue[]="Enter account number: ";
@@ -493,6 +506,7 @@ void DEPOSIT()
     else MENU();
 
 }
+
 void TRANSFER()
 {
     int i,j;
@@ -538,6 +552,7 @@ void TRANSFER()
     }
     else MENU();
 }
+
 void WITHDRAW()
 {
     int i;
@@ -569,6 +584,7 @@ void WITHDRAW()
     else MENU();
 
 }
+
 void advancedSearch()
 {
     int i,j,k,keylen,namelen,check1,check2,good = 0,matchedlen = -1,hold ;
@@ -628,6 +644,7 @@ void advancedSearch()
         printf("Keyword not found\n");
     }
 }
+
 const char* monthName(int month)
 {
     switch (month)
@@ -671,6 +688,7 @@ const char* monthName(int month)
     }
 
 }
+
 void printer(user a)
 {
     printf("Account number: %s\n",a.account_no);
@@ -759,6 +777,7 @@ int dateCmp(date a, date b)
     }
 
 }
+
 void sortByDate(user *a,int z)
 {
     int i,j, flag = 1,type;
@@ -853,6 +872,7 @@ void print()
     }
 
 }
+
 void QUERY()
 {
     int i;
@@ -861,6 +881,7 @@ void QUERY()
     printer(accounts[i]);
 
 }
+
 void deleteacc()
 {
     int i,flag=0;
@@ -890,6 +911,7 @@ void deleteacc()
 }
 
 void modify ()
+
 {
     int i;
     char printvalue[]="Enter account number: ";
@@ -997,6 +1019,7 @@ void report ()
 
     fclose(file);
 }
+
 void save()
 {
     const char* filename="accounts.txt";
@@ -1017,6 +1040,7 @@ void save()
     printf("\nSaved Successfully\n");
     fclose(file);
 }
+
 void askMenu()
 {
     char choice[30];
@@ -1034,6 +1058,7 @@ void askMenu()
         askMenu();
     }
 }
+
 int askSave()
 {
     char choice[30];
@@ -1126,5 +1151,3 @@ int main()
     MENU();
     return 0;
 }
-
-
