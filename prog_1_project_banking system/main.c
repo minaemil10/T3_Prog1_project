@@ -804,7 +804,7 @@ void QUERY()
     char temp[MAX_ACCOUNT_LENGTH];
     strcpy(temp,validateAccountNumber(printvalue,&i));
     if(!atoi(temp)) return;
-    printer(accounts[i]);
+    else printer(accounts[i]);
 
 }
 void deleteacc()
