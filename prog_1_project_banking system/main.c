@@ -29,7 +29,7 @@ typedef struct
 void add();
 void advancedSearch();
 void askMenu();
-void askSave();
+int askSave();
 int checkName(char*name,int i);
 int checkNumber(char* number);
 int dateCmp(date a, date b);
@@ -446,7 +446,7 @@ void add()
     if (file1 == NULL)
     {
         printf("Error opening file\n");
-        exit(-1);
+        exit(1);
     }
     fclose(file1);
     askSave();
@@ -464,7 +464,9 @@ void DEPOSIT()
         strcpy(depositAmount,validateBalance());
     }
     while(!validateBalance100000(depositAmount));
-    askSave();
+    if(askSave)
+    save();
+    else MENU();
     accounts[i].balance+=atof(depositAmount);
     printf("Deposit successful\nNew balance: %f\n",accounts[i].balance);
     double deposit=atof(depositAmount);
@@ -496,7 +498,9 @@ void TRANSFER()
         strcpy(transferAmount,validateBalance());
     }
     while(!validateBalance100000(transferAmount)||!validateBalanceExistance(transferAmount,i));
-    askSave();
+    if(askSave)
+    save();
+    else MENU();
     accounts[i].balance-=atof(transferAmount);
     accounts[j].balance+=atof(transferAmount);  // Update the balances of the source and destination accounts
     printf("Transfer Successful\nNew balance of The source account: %f\nNew balance of The destination account: %f\n",accounts[i].balance,accounts[j].balance);
@@ -529,7 +533,9 @@ int WITHDRAW()
         strcpy(withdrawnAmount,validateBalance());
     }
     while(!validateBalance100000(withdrawnAmount)||!validateBalanceExistance(withdrawnAmount,i));
-    askSave();
+    if(askSave)
+    save();
+    else MENU();
     accounts[i].balance-=atof(withdrawnAmount);
     printf("Transaction succeded\nNew Balance:%f\n",accounts[i].balance);
     double withdraw=atof(withdrawnAmount);
@@ -993,7 +999,7 @@ void askMenu()
         askMenu();
     }
 }
-void askSave()
+int askSave()
 {
     char choice[30];
     printf("Do you want to save the changes?\n1)Yes\t2)No\n");
@@ -1003,9 +1009,9 @@ void askSave()
     switch(atoi(choice))
     {
     case 1:
-        save();
+        return 1;
     case 2:
-        MENU();
+        return 0;
     case 3:
         printf("The Number you entered is not in range\nTry Again");
         askSave();
