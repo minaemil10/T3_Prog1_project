@@ -230,6 +230,7 @@ char* validateAccountNumber(char *printvalue,int *i)
     char* accountNumber = (char*)malloc(MAX_ACCOUNT_LENGTH* sizeof(char));
     do
     {
+        flag=0,flag2=0;
         printf("%s",printvalue);
         scanf("%s", accountNumber);
         getchar();
@@ -909,7 +910,7 @@ void modify ()
            strcpy(temp,validateName());
             if(askSave())
             {
-                strcpy(temp,accounts[i].name);
+                strcpy(accounts[i].name,temp);
                 save();
                 break;
             }
@@ -922,7 +923,7 @@ void modify ()
            strcpy(temp,validateMobile());
             if(askSave())
             {
-                strcpy(temp,accounts[i].mobile);
+                strcpy(accounts[i].mobile,temp);
                 save();
                 break;
             }
@@ -935,7 +936,7 @@ void modify ()
           strcpy(temp,validateEmail());
             if(askSave())
             {
-                strcpy(temp,accounts[i].mail);
+                strcpy(accounts[i].mail,temp);
                 save();
                 break;
             }
