@@ -57,7 +57,7 @@ int validateBalanceExistance(char *balance,int i);
 char* validateDuplication(char *printvalue,int i);
 char* validateEmail();
 char* validateMobile();
-char* validationName();
+char* validateName();
 int WITHDRAW();
 
 
@@ -306,7 +306,7 @@ int checkName(char*name,int i)
         return 1;
     else return 0;
 }
-char* validationName()
+char* validateName()
 {
     int flag,countSpace=0;
     char* name = (char*)malloc(100* sizeof(char));
@@ -437,7 +437,7 @@ void add()
     int i=count-1;
     user temp;
     strcpy(temp.account_no,validateDuplication(printvalue,i));
-    strcpy(temp.name,validationName());
+    strcpy(temp.name,validateName());
     strcpy(temp.mobile,validateMobile());
     strcpy(temp.mail,validateEmail());
     temp.balance=atof(validateBalance());
@@ -893,8 +893,8 @@ void modify ()
     char accountNumber[MAX_ACCOUNT_LENGTH];
     strcpy(accountNumber,validateAccountNumber(printvalue,&i));
     int flag=1;
-    printer(accounts[i]);
     char temp[MAX_ACCOUNT_LENGTH];
+    printer(accounts[i]);
     do
     {
         printf("What do you want to modify\n1)Name\n2)Mobile\n3)Email\n4)Return to Menu\n");
@@ -906,28 +906,40 @@ void modify ()
 
         case 1:
         {
-
-            strcpy(accounts[i].name,validationName());
-            askSave();
-            printer(accounts[i]);
-            break;
+           strcpy(temp,validateName());
+            if(askSave())
+            {
+                strcpy(temp,accounts[i].name);
+                save();
+                break;
+            }
+            else MENU();
         }
 
         case 2:
         {
 
-            strcpy(accounts[i].mobile,validateMobile());
-            askSave();
-            printer(accounts[i]);
-            break;
+           strcpy(temp,validateMobile());
+            if(askSave())
+            {
+                strcpy(temp,accounts[i].mobile);
+                save();
+                break;
+            }
+            else MENU();
         }
 
         case 3:
         {
-            strcpy(accounts[i].mail,validateEmail());
-            askSave();
-            printer(accounts[i]);
-            break;
+
+          strcpy(temp,validateEmail());
+            if(askSave())
+            {
+                strcpy(temp,accounts[i].mail);
+                save();
+                break;
+            }
+            else MENU();
         }
         case 4:
             return;
@@ -984,7 +996,7 @@ int save()
 {
     const char* filename="accounts.txt";
     int i ;
-    FILE* file = fopen(filename, "a");
+    FILE* file = fopen(filename, "w+");
     if (file == NULL)
     {
         printf("Error opening file: %s\n", filename);
