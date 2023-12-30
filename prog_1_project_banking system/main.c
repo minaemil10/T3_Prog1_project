@@ -792,57 +792,59 @@ void sortByDate(user *a,int z)
 void print()
 {
     user sorted[MAX_ACCOUNTS] ;
-    int i,way,type;
+    int i,flag=1;
+    char way[30],type[30];
     for(i=0 ; i < count ; i++)
     {
-        sorted[i] = accounts[i]; //array to change it,s order without changing the original array
+        sorted[i] = accounts[i]; //array to change its order without changing the original array
     }
+    do{
+            flag=1;
     printf("How would you like the accounts to be sorted?\n");
-    printf("1) By name\n2) By Balance\n3) By date opened\n");
-    do
-    {
-        scanf("%d",&way);
-        if(!(way>0 && way<4)) printf("Please enter number from 1 to 3!\n");
-    }
-    while(!(way>0 && way<4));
-    switch(way)
+    printf("1) By Name\n2) By Balance\n3) By Date Opened\n");
+    scanf("%s",way);
+    switch(atoi(way))
     {
     case 1:
-        printf("Please choose the type:\n");
+
+       printf("Please choose the type:\n");
         printf("1) A-Z\n2) Z-A\n");
         do
         {
-            scanf("%d",&type);
-            if(!(type>0 && type<3)) printf("Please enter number from 1 to 2!\n");
+            scanf("%s",type);
+            if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
         }
-        while(!(type>0 && type<3));
-        sortByName(sorted,type);
+        while(!(atoi(type)>0 && atoi(type)<3));
+        sortByName(sorted,atoi(type));
         break;
     case 2:
         printf("Please choose the type:\n");
         printf("1) Highest to Lowest\n2) Lowest to Highest\n");
         do
         {
-            scanf("%d",&type);
-            if(!(type>0 && type<3)) printf("Please enter number from 1 to 2!\n");
+            scanf("%s",type);
+            if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
         }
-        while(!(type>0 && type<3));
-        sortByBalance(sorted,type);
+        while(!(atoi(type)>0 && atoi(type)<3));
+        sortByBalance(sorted,atoi(type));
         break;
     case 3:
         printf("Please choose the type:\n");
         printf("1) Old to New\n2) New to Old\n");
         do
         {
-            scanf("%d",&type);
-            if(!(type>0 && type<3)) printf("Please enter number from 1 to 2!\n");
+            scanf("%s",type);
+            if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
         }
-        while(!(type>0 && type<3));
-        sortByDate(sorted,type);
+        while(!(atoi(type)>0 && atoi(type)<3));
+        sortByDate(sorted,atoi(type));
         break;
-
-
+    default:
+       printf("The Number you entered is not in range\nTRY AGAIN\n");
+       flag=0;
     }
+    }
+     while(!flag);
     printf("\n\n");
     for(i=0 ; i < count ; i++) //print sorted array
     {
@@ -1072,7 +1074,7 @@ void MENU()
     do
     {
 
-        printf("Enter a number from (1 to 12)\n1.ADD\n2.DELETE\n3.MODIFY\n4.WITHDRAW\n5.TRANSFER\n6.DEPOSIT\n7.REPORT\n8.QUERY\n9.ADVANCED SEARCH\n10.PRINT\n11.SAVE\n12.QUIT\n");
+        printf("Enter a number from (1 to 12)\n1.ADD\n2.DELETE\n3.MODIFY\n4.WITHDRAW\n5.TRANSFER\n6.DEPOSIT\n7.REPORT\n8.QUERY\n9.ADVANCED SEARCH\n10.PRINT\n11.QUIT\n");
         scanf("%s", n);
         fflush(stdin);
         switch (atoi(n))
@@ -1108,9 +1110,6 @@ void MENU()
             print();
             break;
         case 11:
-            save();
-            break;
-        case 12:
             quit(2);
             break;
         default:
