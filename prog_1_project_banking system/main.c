@@ -43,7 +43,7 @@ const char* monthName(int month);
 void print();
 void printer(user a);
 void QUERY();
-void quit();
+int quit();
 void report ();
 void save();
 void sortByBalance(user *a,int z);
@@ -193,7 +193,7 @@ int login()
     return 0;
 }
 
-void quit()
+int quit()
 {
     printf("Are you sure thet you want to exit?\n1)yes                  2)no\n");
     int val;
@@ -1148,6 +1148,7 @@ void MENU()
     }
     while(1);
 }
+
 int main()
 {
     MENU();
