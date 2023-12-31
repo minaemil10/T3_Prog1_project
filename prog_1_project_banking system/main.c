@@ -288,7 +288,7 @@ char* validateDuplication(char *printvalue,int i)
         {
             if(!strcmp(accountNumber,accounts[i].account_no))
             {
-                flag_no=1;
+                flag_exist=1;
                 break;
             }
             else continue;
@@ -296,9 +296,9 @@ char* validateDuplication(char *printvalue,int i)
         if(strlen(accountNumber)!=10)
         {
             printf("Error: Account Number must consist of 10 numbers\n");
-            flag_exist=1;
+            flag_no=1;
         }
-        else if (flag_exist)
+       else if (flag_exist)
         {
             printf("Error: Account Number already exist\n");
         }
@@ -545,6 +545,7 @@ void TRANSFER()
         if (file2 == NULL)
         {
             printf("Error opening file");
+            exit(1);
         }
 
         fprintf(file2, "Transferred amount to the account: %f New Balance: %f\n",transfer,accounts[j].balance);
@@ -1103,7 +1104,7 @@ void MENU()
     do
     {
 
-        printf("Enter a number from (1 to 12)\n1.ADD\n2.DELETE\n3.MODIFY\n4.WITHDRAW\n5.TRANSFER\n6.DEPOSIT\n7.REPORT\n8.QUERY\n9.ADVANCED SEARCH\n10.PRINT\n11.QUIT\n");
+        printf("Enter a number from (1 to 11)\n1.ADD\n2.DELETE\n3.MODIFY\n4.WITHDRAW\n5.TRANSFER\n6.DEPOSIT\n7.REPORT\n8.QUERY\n9.ADVANCED SEARCH\n10.PRINT\n11.QUIT\n");
         scanf("%s", n);
         fflush(stdin);
         switch (atoi(n))
