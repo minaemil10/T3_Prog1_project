@@ -1,0 +1,2 @@
+Transferred amount to the account: 100.000000 New Balance: 200.000000
+Withdrawn amount from the account: 200.000000 New Balance: 0.000000

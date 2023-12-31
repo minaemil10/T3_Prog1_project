@@ -376,7 +376,7 @@ char* validateEmail()
                     }
                     else
                     {
-                        printf("Error: Invalid Email format .char\n");
+                        printf("Error: Invalid Email format\n");
                         validateEmail();
                     }
                 }
@@ -1105,7 +1105,7 @@ void askMenu()
 int askSave()
 {
     char choice[30];
-    printf("Do you want to save the changes?\n1)Yes\t2)No\n");
+    printf("Do you want to save the changes?\n1)Yes\n2)No\n");
     scanf("%s",choice);
     if(!checkNumber(choice));
     else
