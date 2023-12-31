@@ -351,48 +351,55 @@ char* validateName()
 char* validateEmail()
 {
     char* email = (char*)malloc(100* sizeof(char));
-    int i,j;
+    int i,j,flag_dot = 0 , flag_at = 0;
 
 
-    printf("Please enter your email: ");
+    printf("Enter your email: ");
     scanf("%s",email);
     fflush(stdin);
 
     for (i = 0; email[i] != '\0'; i++)
     {
+        if(email[i] == '@'){
+                flag_at = 1;
         if(checkName(email,i-1) && checkName(email,i+1))
         {
             for(j=i+2; email[j]!='\0'; j++)
             {
                 if(email[j] == '.')
                 {
+                    flag_dot = 1;
                     if(checkName(email,j+1 )&&checkName(email,j-1))
                     {
                         return email ;
                     }
                     else
                     {
-                        printf("Error: Invalid Email format\n");
+                        printf("Error: Invalid Email format .char\n");
                         validateEmail();
-
                     }
                 }
-                else
-                {
+
+            }
+            if(flag_dot == 0)
+            {
                     printf("Error: Invalid Email format\n");
                     validateEmail();
-                }
             }
-
         }
         else
         {
             printf("Error: Invalid Email format\n");
             validateEmail();
-        }
-    }
-}
+        }}
 
+    }
+    if(flag_at == 0)
+            {
+                    printf("Error: Invalid Email format\n");
+                    validateEmail();
+            }
+}
 
 
 char* validateBalance()
@@ -520,7 +527,7 @@ void DEPOSIT()
 
 void TRANSFER()
 {
-    int i,j;
+    int i,j,flag_existance=1;
     char printvalue1[]="Enter the account number to transfer money from: ";
     char accountNumber1[MAX_ACCOUNT_LENGTH];
     strcpy(accountNumber1,validateAccountNumber(printvalue1,&i));
@@ -536,8 +543,14 @@ void TRANSFER()
     do
     {
         strcpy(transferAmount,validateBalance());
+        if(!validateBalanceExistance(transferAmount,i))
+
+        {
+            askMenu();
+            flag_existance=0;
+        }
     }
-    while(!validateBalance100000(transferAmount)||!validateBalanceExistance(transferAmount,i));
+    while(!validateBalance100000(transferAmount)||!flag_existance);
     if(askSave)
     {
         accounts[i].balance-=atof(transferAmount);
@@ -568,7 +581,7 @@ void TRANSFER()
 
 void WITHDRAW()
 {
-    int i;
+    int i,flag_existance=1;
     char printvalue[]="Enter the account number: ";
     char accountNumber[MAX_ACCOUNT_LENGTH];
     strcpy(accountNumber,validateAccountNumber(printvalue,&i));
@@ -576,8 +589,14 @@ void WITHDRAW()
     do
     {
         strcpy(withdrawnAmount,validateBalance());
+        if(!validateBalanceExistance(withdrawnAmount,i))
+
+        {
+            askMenu();
+            flag_existance=0;
+        }
     }
-    while(!validateBalance100000(withdrawnAmount)||!validateBalanceExistance(withdrawnAmount,i));
+    while(!validateBalance100000(withdrawnAmount)||!flag_existance);
     if(askSave)
     {
         accounts[i].balance-=atof(withdrawnAmount);
