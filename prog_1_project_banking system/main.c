@@ -903,12 +903,9 @@ void QUERY()
 void deleteacc()
 {
     int i,flag=0;
+    char filename[11];
     char printvalue[]="Enter account number: ";
-
-    char temp[MAX_ACCOUNT_LENGTH];
-    strcpy(temp,validateAccountNumber(printvalue,&i));
-    if(!atoi(temp)) return;
-    strcpy(accounts[i].account_no,temp);
+    validateAccountNumber(printvalue,&i);
 
     if(accounts[i].balance!=0)
     {
@@ -917,7 +914,7 @@ void deleteacc()
     }
     if(!flag)
     {
-        askSave();
+       if(askSave()){
         for( i; i<count-1; i++)
         {
             accounts[i]=accounts[i+1];
@@ -925,8 +922,11 @@ void deleteacc()
         count--;
         printf("The account has been deleted\n");
         save();
+        sprintf(filename,"%s.txt",accounts[i].account_no);
+        remove(filename);
     }
-}
+    else MENU();
+}}
 
 void modify ()
 {
