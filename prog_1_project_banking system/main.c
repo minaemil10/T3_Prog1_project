@@ -151,11 +151,11 @@ int login()
 
     printf("Enter username: ");
     scanf("%s", username);
-    getchar();
+    fflush(stdin);
 
     printf("Enter password: ");
     scanf("%s", password);
-    getchar();
+    fflush(stdin);
 
     FILE* file = fopen("users.txt", "r");
     if (file == NULL)
@@ -239,12 +239,12 @@ char* validateAccountNumber(char *printvalue,int *i)
         flag_exist=0,flag_no=0;
         printf("%s",printvalue);
         scanf("%s", accountNumber);
-        getchar();
+        fflush(stdin);
         while(!checkNumber(accountNumber))
         {
             printf("%s",printvalue);
             scanf("%s", accountNumber);
-            getchar();
+            fflush(stdin);
         }
         for(*i=0; *i<count; (*i)++)
         {
@@ -279,12 +279,12 @@ char* validateDuplication(char *printvalue,int i)
         flag_exist=0,flag_no=0;
         printf("%s",printvalue);
         scanf("%s", accountNumber);
-        getchar();
+        fflush(stdin);
         while(!checkNumber(accountNumber))
         {
             printf("%s",printvalue);
             scanf("%s", accountNumber);
-            getchar();
+            fflush(stdin);
         }
         for(i=0; i<count; i++)
         {
@@ -357,7 +357,7 @@ char* validateEmail()
         flag_mail_at=0,flag_mail_dot=0;
         printf("Please enter your email: ");
         scanf("%s",email);
-        getchar();
+        fflush(stdin);
         for (i = 0; email[i] != '\0'; i++)
         {
             if (email[i] == '@')
@@ -394,7 +394,7 @@ char* validateBalance()
     {
         printf("Enter your balance: ");
         scanf("%s", balance);
-        getchar();
+        fflush(stdin);
     }
     while (!checkNumber(balance));
     return balance;
@@ -409,12 +409,12 @@ char* validateMobile()
         flag_mobile=0;
         printf("Enter the mobile number: ");
         scanf("%s", mobileNumber);
-        getchar();
+        fflush(stdin);
         while(!checkNumber(mobileNumber))
         {
             printf("Enter the mobile number: ");
             scanf("%s", mobileNumber);
-            getchar();
+            fflush(stdin);
         }
         if(strlen(mobileNumber)!=11)
         {
@@ -935,7 +935,7 @@ void modify ()
         printf("What do you want to modify\n1)Name\n2)Mobile\n3)Email\n4)Return to Menu\n");
         char choice[30];
         scanf("%s", choice);
-        getchar();
+        fflush(stdin);
                 if(!checkNumber(choice))
                     flag_no=0;
             else
@@ -1059,7 +1059,7 @@ void askMenu()
     char choice[30];
     printf("What do you want\n1)Continue\n2)Return to Menu\n");
     scanf("%s",choice);
-    getchar();
+    fflush(stdin);
     switch(atoi(choice))
     {
     case 1:
@@ -1077,7 +1077,7 @@ int askSave()
     char choice[30];
     printf("Do you want to save the changes?\n1)Yes\t2)No\n");
     scanf("%s",choice);
-    getchar();
+    fflush(stdin);
 
     switch(atoi(choice))
     {
@@ -1104,8 +1104,9 @@ void MENU()
         scanf("%s", n);
         fflush(stdin);
         if(!checkNumber(n));
-        else if(atoi(n)!=1&&atoi(n)!=2 )
-            printf("The Number you entered is not in range\nTRY AGAIN\n");
+        else if(atoi(n)!=1&&atoi(n)!=2 ){
+                system("cls");
+            printf("The Number you entered is not in range\nTRY AGAIN\n");}
         else
         {
             if (atoi(n) == 2) quit(1);
