@@ -143,12 +143,11 @@ int loadAccounts()
 
     fclose(file);
 }
-
 int login()
 {
     char username[MAX_USERNAME_LENGTH];
     char password[MAX_PASSWORD_LENGTH];
-
+    int check_valid=0;
     printf("Enter username: ");
     scanf("%s", username);
     fflush(stdin);
@@ -157,7 +156,7 @@ int login()
     scanf("%s", password);
     fflush(stdin);
 
-    FILE* file = fopen("users.txt", "r");
+    FILE* file = fopen("users.txt", "r+");
     if (file == NULL)
     {
         printf("Error opening file: users.txt\n");
@@ -179,14 +178,16 @@ int login()
             system("cls");
             printf("Welcome to the system!\n");
             loadAccounts();
+            check_valid=1;
             return 1;  // Successful login
         }
-        else
-        {
-            system("cls");
-            printf("Invalid username or password\n");
-            return 0;
-        }
+
+    }
+    if(!check_valid){
+        system("cls");
+        printf("Invalid username or password\n");
+        return 0;
+
     }
 
     fclose(file);
