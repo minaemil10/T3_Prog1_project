@@ -356,50 +356,34 @@ char* validateEmail()
 
     printf("Please enter your email: ");
     scanf("%s",email);
-    getchar();
+    fflush(stdin);
 
     for (i = 0; email[i] != '\0'; i++)
     {
-<<<<<<< Updated upstream
-        flag_mail_at=0,flag_mail_dot=0;
-        printf("Please enter your email: ");
-        scanf("%s",email);
-        fflush(stdin);
-        for (i = 0; email[i] != '\0'; i++)
-=======
-        if(email[i] == '@')
->>>>>>> Stashed changes
+        if(checkName(email,i-1) && checkName(email,i+1))
         {
-            if(checkName(email,i-1) && checkName(email,i+1))
+            for(j=i+2; email[j]!='\0'; j++)
             {
-                for(j=i+2; email[j]!='\0'; j++)
+                if(email[j] == '.')
                 {
-                    if(email[j] == '.')
+                    if(checkName(email,j+1 )&&checkName(email,j-1))
                     {
-                        if(checkName(email,j+1 )&&checkName(email,j-1))
-                        {
-                            return email ;
-                        }
-                        else
-                        {
-                            printf("Error: Invalid Email format\n");
-                            validateEmail();
-
-                        }
+                        return email ;
                     }
                     else
                     {
                         printf("Error: Invalid Email format\n");
                         validateEmail();
+
                     }
                 }
-
-            }
-            else
+                else
                 {
                     printf("Error: Invalid Email format\n");
                     validateEmail();
                 }
+            }
+
         }
         else
         {
@@ -407,8 +391,9 @@ char* validateEmail()
             validateEmail();
         }
     }
-
 }
+
+
 
 char* validateBalance()
 {
@@ -958,25 +943,11 @@ void modify ()
         printf("What do you want to modify\n1)Name\n2)Mobile\n3)Email\n4)Return to Menu\n");
         char choice[30];
         scanf("%s", choice);
-<<<<<<< Updated upstream
         fflush(stdin);
-                if(!checkNumber(choice))
-                    flag_no=0;
-            else
-        switch (atoi(choice))
-        {
-
-        case 1:
-        {
-            strcpy(temp,validateName());
-            if(askSave())
-=======
-        getchar();
         if(!checkNumber(choice))
             flag_no=0;
         else
             switch (atoi(choice))
->>>>>>> Stashed changes
             {
 
             case 1:
@@ -1096,23 +1067,19 @@ void askMenu()
     char choice[30];
     printf("What do you want\n1)Continue\n2)Return to Menu\n");
     scanf("%s",choice);
-<<<<<<< Updated upstream
     fflush(stdin);
-=======
-    getchar();
-            if(!checkNumber(choice));
-            else
->>>>>>> Stashed changes
-    switch(atoi(choice))
-    {
-    case 1:
-        return;
-    case 2:
-        MENU();
-    default:
-        printf("The Number you entered is not in range\nTry Again\n");
-        askMenu();
-    }
+    if(!checkNumber(choice));
+    else
+        switch(atoi(choice))
+        {
+        case 1:
+            return;
+        case 2:
+            MENU();
+        default:
+            printf("The Number you entered is not in range\nTry Again\n");
+            askMenu();
+        }
 }
 
 int askSave()
@@ -1120,24 +1087,19 @@ int askSave()
     char choice[30];
     printf("Do you want to save the changes?\n1)Yes\t2)No\n");
     scanf("%s",choice);
-<<<<<<< Updated upstream
-    fflush(stdin);
-=======
     if(!checkNumber(choice));
-            else
-    getchar();
->>>>>>> Stashed changes
+    else
 
-    switch(atoi(choice))
-    {
-    case 1:
-        return 1;
-    case 2:
-        return 0;
-    case 3:
-        printf("The Number you entered is not in range\nTry Again");
-        askSave();
-    }
+        switch(atoi(choice))
+        {
+        case 1:
+            return 1;
+        case 2:
+            return 0;
+        case 3:
+            printf("The Number you entered is not in range\nTry Again");
+            askSave();
+        }
 
 }
 
@@ -1153,9 +1115,11 @@ void MENU()
         scanf("%s", n);
         fflush(stdin);
         if(!checkNumber(n));
-        else if(atoi(n)!=1&&atoi(n)!=2 ){
-                system("cls");
-            printf("The Number you entered is not in range\nTRY AGAIN\n");}
+        else if(atoi(n)!=1&&atoi(n)!=2 )
+        {
+            system("cls");
+            printf("The Number you entered is not in range\nTRY AGAIN\n");
+        }
         else
         {
             if (atoi(n) == 2) quit(1);
