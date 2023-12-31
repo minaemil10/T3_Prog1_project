@@ -201,9 +201,9 @@ int quit()
     fflush(stdin);
     if(!checkNumber(val))
         quit();
-    else if(val==1)
+    else if(atoi(val)==1)
         exit(1);
-    else if(val==2)
+    else if(atoi(val)==2)
     {
         system("cls");
         return 0;
