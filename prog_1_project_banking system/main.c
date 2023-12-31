@@ -466,7 +466,7 @@ void add()
     {
         accounts[i]=temp;
         char filename[30] ;
-        sprintf(filename,"%s.txt",accounts[count].account_no);
+        sprintf(filename,"%s.txt",accounts[i].account_no);
         FILE *file1=fopen(filename, "w");
         if (file1 == NULL)
         {
