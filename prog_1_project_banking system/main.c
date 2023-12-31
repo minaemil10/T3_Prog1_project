@@ -183,7 +183,8 @@ int login()
         }
 
     }
-    if(!check_valid){
+    if(!check_valid)
+    {
         system("cls");
         printf("Invalid username or password\n");
         return 0;
@@ -353,7 +354,7 @@ char* validateName()
 char* validateEmail()
 {
     char* email = (char*)malloc(100* sizeof(char));
-    int i,j,flag_dot = 0 , flag_at = 0;
+    int i,j,flag_dot = 0, flag_at = 0;
 
 
     printf("Enter your email: ");
@@ -362,45 +363,47 @@ char* validateEmail()
 
     for (i = 0; email[i] != '\0'; i++)
     {
-        if(email[i] == '@'){
-                flag_at = 1;
-        if(checkName(email,i-1) && checkName(email,i+1))
+        if(email[i] == '@')
         {
-            for(j=i+2; email[j]!='\0'; j++)
+            flag_at = 1;
+            if(checkName(email,i-1) && checkName(email,i+1))
             {
-                if(email[j] == '.')
+                for(j=i+2; email[j]!='\0'; j++)
                 {
-                    flag_dot = 1;
-                    if(checkName(email,j+1 )&&checkName(email,j-1))
+                    if(email[j] == '.')
                     {
-                        return email ;
+                        flag_dot = 1;
+                        if(checkName(email,j+1 )&&checkName(email,j-1))
+                        {
+                            return email ;
+                        }
+                        else
+                        {
+                            printf("Error: Invalid Email format\n");
+                            validateEmail();
+                        }
                     }
-                    else
-                    {
-                        printf("Error: Invalid Email format\n");
-                        validateEmail();
-                    }
-                }
 
-            }
-            if(flag_dot == 0)
-            {
+                }
+                if(flag_dot == 0)
+                {
                     printf("Error: Invalid Email format\n");
                     validateEmail();
+                }
+            }
+            else
+            {
+                printf("Error: Invalid Email format\n");
+                validateEmail();
             }
         }
-        else
-        {
-            printf("Error: Invalid Email format\n");
-            validateEmail();
-        }}
 
     }
     if(flag_at == 0)
-            {
-                    printf("Error: Invalid Email format\n");
-                    validateEmail();
-            }
+    {
+        printf("Error: Invalid Email format\n");
+        validateEmail();
+    }
 }
 
 
@@ -633,7 +636,7 @@ void WITHDRAW()
             flag_existance=0;
         }
         free(ptr);
-            ptr=validateBalance100000(withdrawnAmount);
+        ptr=validateBalance100000(withdrawnAmount);
     }
 
     while(!ptr||!flag_existance);
@@ -964,7 +967,7 @@ void QUERY()
 
 void deleteacc()
 {
-    int i,flag=0;
+    int i,flag=0,err;
     char filename[11];
     char*ptr;
     char printvalue[]="Enter account number: ";
@@ -978,19 +981,30 @@ void deleteacc()
     }
     if(!flag)
     {
-       if(askSave()){
-        for( i; i<count-1; i++)
+        if(askSave())
         {
-            accounts[i]=accounts[i+1];
+            sprintf(filename,"%s.txt",accounts[i].account_no);
+            err = remove(filename);
+            if(err == 1)
+            {
+                printf("file deleted successfully\n");
+            }
+            else
+            {
+                printf("file deleted successfully\n");
+            }
+            for( i; i<count-1; i++)
+            {
+                accounts[i]=accounts[i+1];
+            }
+            count--;
+            printf("The account has been deleted\n");
+            save();
+
         }
-        count--;
-        printf("The account has been deleted\n");
-        save();
-        sprintf(filename,"%s.txt",accounts[i].account_no);
-        remove(filename);
+        else MENU();
     }
-    else MENU();
-}}
+}
 
 void modify ()
 {
