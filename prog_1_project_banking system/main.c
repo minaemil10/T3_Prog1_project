@@ -200,6 +200,7 @@ int quit()
     char val[30];
     scanf("%s",val);
     fflush(stdin);
+
     if(!checkNumber(val))
         quit();
     else if(atoi(val)==1)
@@ -467,12 +468,23 @@ void add()
     char printvalue[]="Enter account number: ";
     count++;
     int i=count-1;
+    char*ptr;
     user temp;
-    strcpy(temp.account_no,validateDuplication(printvalue,i));
-    strcpy(temp.name,validateName());
-    strcpy(temp.mobile,validateMobile());
-    strcpy(temp.mail,validateEmail());
-    temp.balance=atof(validateBalance());
+    ptr=validateDuplication(printvalue,i);
+    strcpy(temp.account_no,ptr);
+    free(ptr);
+    ptr=validateName();
+    strcpy(temp.name,ptr);
+    free(ptr);
+    ptr=validateMobile();
+    strcpy(temp.mobile,ptr);
+    free(ptr);
+    ptr=validateEmail();
+    strcpy(temp.mail,ptr);
+    free(ptr);
+    ptr=validateBalance();
+    temp.balance=atof(ptr);
+    free(ptr);
     time_t t;
     time(&t);
     struct tm *tm_info = localtime(&t);
@@ -498,13 +510,18 @@ void add()
 void DEPOSIT()
 {
     int i;
+    char*ptr;
     char printvalue[]="Enter the account number: ";
     char accountNumber[MAX_ACCOUNT_LENGTH];
-    strcpy(accountNumber,validateAccountNumber(printvalue,&i));
+    ptr=validateAccountNumber(printvalue,&i);
+    strcpy(accountNumber,ptr);
+    free(ptr);
     char  depositAmount[100];
     do
     {
-        strcpy(depositAmount,validateBalance());
+        ptr=validateBalance();
+        strcpy(depositAmount,ptr);
+        free(ptr);
     }
     while(!validateBalance100000(depositAmount));
     if(askSave)
@@ -529,29 +546,43 @@ void DEPOSIT()
 void TRANSFER()
 {
     int i,j,flag_existance=1;
+    char*ptr;
     char printvalue1[]="Enter the account number to transfer money from: ";
     char accountNumber1[MAX_ACCOUNT_LENGTH];
-    strcpy(accountNumber1,validateAccountNumber(printvalue1,&i));
+    ptr=validateAccountNumber(printvalue1,&i);
+    strcpy(accountNumber1,ptr);
+    free(ptr);
     char printvalue2[]="Enter the account number to transfer money to: ";
     char accountNumber2[MAX_ACCOUNT_LENGTH];
-    strcpy(accountNumber2,validateAccountNumber(printvalue2,&j));
+
+    ptr=validateAccountNumber(printvalue2,&j);
+    strcpy(accountNumber2,ptr);
+    free(ptr);
     while(atof(accountNumber1)==atof(accountNumber2))
     {
         printf("Error: You can't transfer money to the same account\n");
-        strcpy(accountNumber2,validateAccountNumber(printvalue2,&j));
+        ptr=validateAccountNumber(printvalue2,&j);
+        strcpy(accountNumber2,ptr);
+        free(ptr);
     }
     char  transferAmount[100];
     do
     {
-        strcpy(transferAmount,validateBalance());
-        if(!validateBalanceExistance(transferAmount,i))
+        ptr=validateBalance();
+        strcpy(transferAmount,ptr);
+        free(ptr);
+        ptr=validateBalanceExistance(transferAmount,i);
+        if(!ptr)
 
         {
             askMenu();
             flag_existance=0;
         }
+        free(ptr);
+        ptr=validateBalance100000(transferAmount);
     }
-    while(!validateBalance100000(transferAmount)||!flag_existance);
+    while(!ptr||!flag_existance);
+    free(ptr);
     if(askSave)
     {
         accounts[i].balance-=atof(transferAmount);
@@ -585,19 +616,28 @@ void WITHDRAW()
     int i,flag_existance=1;
     char printvalue[]="Enter the account number: ";
     char accountNumber[MAX_ACCOUNT_LENGTH];
-    strcpy(accountNumber,validateAccountNumber(printvalue,&i));
+    char* ptr;
+    ptr=validateAccountNumber(printvalue,&i);
+    strcpy(accountNumber,ptr);
+    free(ptr);
     char  withdrawnAmount[100];
     do
     {
-        strcpy(withdrawnAmount,validateBalance());
-        if(!validateBalanceExistance(withdrawnAmount,i))
-
+        ptr=validateBalance();
+        strcpy(withdrawnAmount,ptr);
+        free(ptr);
+        ptr=validateBalanceExistance(withdrawnAmount,i);
+        if(!ptr)
         {
             askMenu();
             flag_existance=0;
         }
+        free(ptr);
+            ptr=validateBalance100000(withdrawnAmount);
     }
-    while(!validateBalance100000(withdrawnAmount)||!flag_existance);
+
+    while(!ptr||!flag_existance);
+    free(ptr);
     if(askSave)
     {
         accounts[i].balance-=atof(withdrawnAmount);
@@ -914,8 +954,10 @@ void print()
 void QUERY()
 {
     int i;
+    char*ptr;
     char printvalue[]="Enter account number: ";
-    validateAccountNumber(printvalue,&i);
+    ptr=validateAccountNumber(printvalue,&i);
+    free(ptr);
     printer(accounts[i]);
 
 }
@@ -924,9 +966,11 @@ void deleteacc()
 {
     int i,flag=0;
     char filename[11];
+    char*ptr;
     char printvalue[]="Enter account number: ";
-    validateAccountNumber(printvalue,&i);
 
+    ptr=validateAccountNumber(printvalue,&i);
+    free(ptr);
     if(accounts[i].balance!=0)
     {
         printf("Balance not equal to zero, Account cannot be deleted\n");
@@ -952,8 +996,12 @@ void modify ()
 {
     int i;
     char printvalue[]="Enter account number: ";
+
     char accountNumber[MAX_ACCOUNT_LENGTH];
-    strcpy(accountNumber,validateAccountNumber(printvalue,&i));
+    char*ptr;
+    ptr=validateAccountNumber(printvalue,&i);
+    strcpy(accountNumber,ptr);
+    free(ptr);
     int flag=1,flag_no=1;
     char temp[MAX_ACCOUNT_LENGTH];
     printer(accounts[i]);
@@ -972,7 +1020,9 @@ void modify ()
 
             case 1:
             {
-                strcpy(temp,validateName());
+                ptr=validateName();
+                strcpy(temp,ptr);
+                free(ptr);
                 if(askSave())
                 {
                     strcpy(accounts[i].name,temp);
@@ -984,8 +1034,9 @@ void modify ()
 
             case 2:
             {
-
-                strcpy(temp,validateMobile());
+                ptr=validateMobile();
+                strcpy(temp,ptr);
+                free(ptr);
                 if(askSave())
                 {
                     strcpy(accounts[i].mobile,temp);
@@ -998,7 +1049,9 @@ void modify ()
             case 3:
             {
 
-                strcpy(temp,validateEmail());
+                ptr=validateEmail();
+                strcpy(temp,ptr);
+                free(ptr);
                 if(askSave())
                 {
                     strcpy(accounts[i].mail,temp);
@@ -1023,7 +1076,10 @@ void report ()
 {
     int i;
     char printvalue[]="Enter account number: ";
-    strcpy(accounts[i].account_no,validateAccountNumber(printvalue,&i));
+    char*ptr;
+    ptr=validateAccountNumber(printvalue,&i);
+    strcpy(accounts[i].account_no,ptr);
+    free(ptr);
     char filename[30];
     sprintf(filename,"%s.txt",accounts[i].account_no);
     FILE *file1=fopen(filename, "a");
