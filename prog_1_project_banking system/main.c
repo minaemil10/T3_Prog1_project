@@ -230,11 +230,11 @@ int checkNumber(char* number)
 
 char* validateAccountNumber(char *printvalue,int *i)
 {
-    int flag=0,flag2=0;
+    int flag_exist=0,flag_no=0;
     char* accountNumber = (char*)malloc(MAX_ACCOUNT_LENGTH* sizeof(char));
     do
     {
-        flag=0,flag2=0;
+        flag_exist=0,flag_no=0;
         printf("%s",printvalue);
         scanf("%s", accountNumber);
         getchar();
@@ -248,7 +248,7 @@ char* validateAccountNumber(char *printvalue,int *i)
         {
             if(!strcmp(accountNumber,accounts[*i].account_no))
             {
-                flag=1;
+                flag_exist=1;
                 break;
             }
             else continue;
@@ -256,25 +256,25 @@ char* validateAccountNumber(char *printvalue,int *i)
         if(strlen(accountNumber)!=10)
         {
             printf("Error: Account Number must consist of 10 numbers\n");
-            flag2=1;
+            flag_no=1;
         }
-        else if (!flag)
+        else if (!flag_exist)
         {
             printf("Error: Account Number doesn't exist\n");
             askMenu();
         }
     }
-    while (!flag||flag2);
+    while (!flag_exist||flag_no);
     return accountNumber;
 }
 
 char* validateDuplication(char *printvalue,int i)
 {
-    int flag1=0,flag2=0;
+    int flag_exist=0,flag_no=0;
     char* accountNumber = (char*)malloc(MAX_ACCOUNT_LENGTH* sizeof(char));
     do
     {
-        flag1=0,flag2=0;
+        flag_exist=0,flag_no=0;
         printf("%s",printvalue);
         scanf("%s", accountNumber);
         getchar();
@@ -288,7 +288,7 @@ char* validateDuplication(char *printvalue,int i)
         {
             if(!strcmp(accountNumber,accounts[i].account_no))
             {
-                flag1=1;
+                flag_no=1;
                 break;
             }
             else continue;
@@ -296,14 +296,14 @@ char* validateDuplication(char *printvalue,int i)
         if(strlen(accountNumber)!=10)
         {
             printf("Error: Account Number must consist of 10 numbers\n");
-            flag2=1;
+            flag_exist=1;
         }
-        else if (flag1)
+        else if (flag_exist)
         {
             printf("Error: Account Number already exist\n");
         }
     }
-    while (flag1||flag2);
+    while (flag_exist||flag_no);
     return accountNumber;
 }
 
@@ -316,7 +316,7 @@ int checkName(char*name,int i)
 
 char* validateName()
 {
-    int flag,countSpace=0;
+    int flag_name,countSpace=0;
     char* name = (char*)malloc(100* sizeof(char));
     do
     {
@@ -325,11 +325,11 @@ char* validateName()
         gets(name);
         for (int i=0; i<strlen(name); i++)
         {
-            flag = 1;
+            flag_name = 1;
             if (!(checkName(name,i)||(name[i] == ' ')))
             {
                 printf("Error: Name must only consist of characters\n");
-                flag = 0;
+                flag_name = 0;
                 break;
             }
             if(name[i]==' '&&checkName(name,i+1))
@@ -342,17 +342,17 @@ char* validateName()
             printf("Error: Name must consist of first name and last name\n");
         }
     }
-    while (!flag||countSpace<1);
+    while (!flag_name||countSpace<1);
     return name;
 }
 
 char* validateEmail()
 {
     char* email = (char*)malloc(100* sizeof(char));
-    int flag_mail=0,flag=0,i,j;
+    int flag_mail_at=0,flag_mail_dot=0,i,j;
     do
     {
-        flag_mail=0,flag=0;
+        flag_mail_at=0,flag_mail_dot=0;
         printf("Please enter your email: ");
         scanf("%s",email);
         getchar();
@@ -360,28 +360,28 @@ char* validateEmail()
         {
             if (email[i] == '@')
             {
-                flag_mail = 1;
+                flag_mail_at = 1;
                 for(j=i-1; email[j]!='\0'; j++)
                 {
                     if(email[j]=='.')
                     {
-                        flag=1;
+                        flag_mail_dot=1;
                         break;
                     }
                 }
             }
         }
 
-        if (!flag_mail)
+        if (!flag_mail_at)
         {
             printf("Error: Email must contain @\n");
         }
-        if(!flag)
+        else if(!flag_mail_dot)
         {
             printf("Error: Email must contain . after @\n");
         }
     }
-    while (!flag_mail||!flag);
+    while (!flag_mail_at||!flag_mail_dot);
     return email;
 }
 
@@ -401,10 +401,10 @@ char* validateBalance()
 char* validateMobile()
 {
     char* mobileNumber = (char*)malloc(15* sizeof(char));
-    int flag=0;
+    int flag_mobile=0;
     do
     {
-        flag=0;
+        flag_mobile=0;
         printf("Enter the mobile number: ");
         scanf("%s", mobileNumber);
         getchar();
@@ -417,10 +417,10 @@ char* validateMobile()
         if(strlen(mobileNumber)!=11)
         {
             printf("Error: Mobile number must consist of 11 numbers\n");
-            flag=1;
+            flag_mobile=1;
         }
     }
-    while(flag);
+    while(flag_mobile);
     return mobileNumber;
 }
 
@@ -498,6 +498,7 @@ void DEPOSIT()
         if (file == NULL)
         {
             printf("Error opening file");
+            exit(1);
         }
         fprintf(file, "Depositted amount to the account: %f New balance: %f\n", deposit,accounts[i].balance);
         fclose(file);
@@ -537,6 +538,7 @@ void TRANSFER()
         if (file1 == NULL)
         {
             printf("Error opening file");
+            exit(1);
         }
         fprintf(file1, "Transferred amount from the account: %f New Balance: %f\n",transfer,accounts[i].balance);
         FILE* file2 = fopen(strcat(accountNumber2,".txt"), "a");
