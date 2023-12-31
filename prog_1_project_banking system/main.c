@@ -195,13 +195,15 @@ int login()
 
 int quit()
 {
-    printf("Are you sure thet you want to exit?\n1)yes                  2)no\n");
-    int val;
-    scanf("%d",&val);
+    printf("Are you sure that you want to exit?\n1)Yes\n2)No\n");
+    char val[30];
+    scanf("%s",val);
     fflush(stdin);
-    if(val==1)
+    if(!checkNumber(val))
+        quit();
+    else if(val==1)
         exit(1);
-    if(val==2)
+    else if(val==2)
     {
         system("cls");
         return 0;
@@ -211,7 +213,7 @@ int quit()
         system("cls");
         printf("The Number you entered is not in range\nTRY AGAIN\n");
         quit();
-    };
+    }
 }
 
 int checkNumber(char* number)
@@ -298,7 +300,7 @@ char* validateDuplication(char *printvalue,int i)
             printf("Error: Account Number must consist of 10 numbers\n");
             flag_no=1;
         }
-       else if (flag_exist)
+        else if (flag_exist)
         {
             printf("Error: Account Number already exist\n");
         }
@@ -463,15 +465,15 @@ void add()
     if(askSave())
     {
         accounts[i]=temp;
-    char filename[30] ;
-    sprintf(filename,"%s.txt",accounts[count].account_no);
-    FILE *file1=fopen(filename, "w");
-    if (file1 == NULL)
-    {
-        printf("Error opening file\n");
-        exit(1);
-    }
-    fclose(file1);
+        char filename[30] ;
+        sprintf(filename,"%s.txt",accounts[count].account_no);
+        FILE *file1=fopen(filename, "w");
+        if (file1 == NULL)
+        {
+            printf("Error opening file\n");
+            exit(1);
+        }
+        fclose(file1);
         save();
     }
     else MENU();
@@ -570,19 +572,19 @@ void WITHDRAW()
     while(!validateBalance100000(withdrawnAmount)||!validateBalanceExistance(withdrawnAmount,i));
     if(askSave)
     {
-       accounts[i].balance-=atof(withdrawnAmount);
-    printf("Transaction succeded\nNew Balance:%f\n",accounts[i].balance);
-    double withdraw=atof(withdrawnAmount);
-    FILE* file = fopen(strcat(accountNumber,".txt"), "a");
-    if (file == NULL)
-    {
-        printf("Error opening file");
-        exit(1);
-    }
-    fprintf(file, "Withdrawn amount from the account: %f New Balance: %f\n",withdraw,accounts[i].balance);
+        accounts[i].balance-=atof(withdrawnAmount);
+        printf("Transaction succeded\nNew Balance:%f\n",accounts[i].balance);
+        double withdraw=atof(withdrawnAmount);
+        FILE* file = fopen(strcat(accountNumber,".txt"), "a");
+        if (file == NULL)
+        {
+            printf("Error opening file");
+            exit(1);
+        }
+        fprintf(file, "Withdrawn amount from the account: %f New Balance: %f\n",withdraw,accounts[i].balance);
 
-    fclose(file);
-       save();
+        fclose(file);
+        save();
     }
     else MENU();
 
@@ -814,59 +816,64 @@ void sortByDate(user *a,int z)
 void print()
 {
     user sorted[MAX_ACCOUNTS] ;
-    int i,flag=1;
+    int i,flag=1,flag_no=1;
     char way[30],type[30];
     for(i=0 ; i < count ; i++)
     {
         sorted[i] = accounts[i]; //array to change its order without changing the original array
     }
-    do{
-            flag=1;
-    printf("How would you like the accounts to be sorted?\n");
-    printf("1) By Name\n2) By Balance\n3) By Date Opened\n");
-    scanf("%s",way);
-    switch(atoi(way))
+    do
     {
-    case 1:
+        flag=1,flag_no=1;
+        printf("How would you like the accounts to be sorted?\n");
+        printf("1) By Name\n2) By Balance\n3) By Date Opened\n");
+        scanf("%s",way);
+        fflush(stdin);
+        if(!checkNumber(way))
+            flag_no=0;
+            else
+        switch(atoi(way))
+        {
+        case 1:
 
-       printf("Please choose the type:\n");
-        printf("1) A-Z\n2) Z-A\n");
-        do
-        {
-            scanf("%s",type);
-            if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
+            printf("Please choose the type:\n");
+            printf("1) A-Z\n2) Z-A\n");
+            do
+            {
+                scanf("%s",type);
+                if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
+            }
+            while(!(atoi(type)>0 && atoi(type)<3));
+            sortByName(sorted,atoi(type));
+            break;
+        case 2:
+            printf("Please choose the type:\n");
+            printf("1) Highest to Lowest\n2) Lowest to Highest\n");
+            do
+            {
+                scanf("%s",type);
+                if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
+            }
+            while(!(atoi(type)>0 && atoi(type)<3));
+            sortByBalance(sorted,atoi(type));
+            break;
+        case 3:
+            printf("Please choose the type:\n");
+            printf("1) Old to New\n2) New to Old\n");
+            do
+            {
+                scanf("%s",type);
+                if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
+            }
+            while(!(atoi(type)>0 && atoi(type)<3));
+            sortByDate(sorted,atoi(type));
+            break;
+        default:
+            printf("The Number you entered is not in range\nTRY AGAIN\n");
+            flag=0;
         }
-        while(!(atoi(type)>0 && atoi(type)<3));
-        sortByName(sorted,atoi(type));
-        break;
-    case 2:
-        printf("Please choose the type:\n");
-        printf("1) Highest to Lowest\n2) Lowest to Highest\n");
-        do
-        {
-            scanf("%s",type);
-            if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
-        }
-        while(!(atoi(type)>0 && atoi(type)<3));
-        sortByBalance(sorted,atoi(type));
-        break;
-    case 3:
-        printf("Please choose the type:\n");
-        printf("1) Old to New\n2) New to Old\n");
-        do
-        {
-            scanf("%s",type);
-            if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
-        }
-        while(!(atoi(type)>0 && atoi(type)<3));
-        sortByDate(sorted,atoi(type));
-        break;
-    default:
-       printf("The Number you entered is not in range\nTRY AGAIN\n");
-       flag=0;
     }
-    }
-     while(!flag);
+    while(!flag||!flag_no);
     printf("\n\n");
     for(i=0 ; i < count ; i++) //print sorted array
     {
@@ -914,27 +921,30 @@ void deleteacc()
 }
 
 void modify ()
-
 {
     int i;
     char printvalue[]="Enter account number: ";
     char accountNumber[MAX_ACCOUNT_LENGTH];
     strcpy(accountNumber,validateAccountNumber(printvalue,&i));
-    int flag=1;
+    int flag=1,flag_no=1;
     char temp[MAX_ACCOUNT_LENGTH];
     printer(accounts[i]);
     do
     {
+        flag=1,flag_no=1;
         printf("What do you want to modify\n1)Name\n2)Mobile\n3)Email\n4)Return to Menu\n");
         char choice[30];
         scanf("%s", choice);
         getchar();
+                if(!checkNumber(choice))
+                    flag_no=0;
+            else
         switch (atoi(choice))
         {
 
         case 1:
         {
-           strcpy(temp,validateName());
+            strcpy(temp,validateName());
             if(askSave())
             {
                 strcpy(accounts[i].name,temp);
@@ -947,7 +957,7 @@ void modify ()
         case 2:
         {
 
-           strcpy(temp,validateMobile());
+            strcpy(temp,validateMobile());
             if(askSave())
             {
                 strcpy(accounts[i].mobile,temp);
@@ -960,7 +970,7 @@ void modify ()
         case 3:
         {
 
-          strcpy(temp,validateEmail());
+            strcpy(temp,validateEmail());
             if(askSave())
             {
                 strcpy(accounts[i].mail,temp);
@@ -979,7 +989,7 @@ void modify ()
         }
         }
     }
-    while(!flag);
+    while(!flag||!flag_no);
 }
 void report ()
 {
@@ -1003,7 +1013,7 @@ void report ()
     while(!feof(file))
         if(fgets(buffer[no_line],MAX_LEN,file)!=NULL)no_line++;
     if(no_line==0)
-            printf("No transactions happened on this account\n");
+        printf("No transactions happened on this account\n");
 
     else if(no_line>=5)
     {
@@ -1093,10 +1103,14 @@ void MENU()
         printf("Enter (1 or 2)\n1.LOGIN\n2.QUIT\n");
         scanf("%s", n);
         fflush(stdin);
-        if(atoi(n)!=1&&atoi(n)!=2)
+        if(!checkNumber(n));
+        else if(atoi(n)!=1&&atoi(n)!=2 )
             printf("The Number you entered is not in range\nTRY AGAIN\n");
-        if (atoi(n) == 2) quit(1);
-        if (atoi(n) == 1 && login() == 1)  flag_login++;
+        else
+        {
+            if (atoi(n) == 2) quit(1);
+            if (atoi(n) == 1 && login() == 1)  flag_login++;
+        }
 
     }
 
@@ -1107,6 +1121,8 @@ void MENU()
         printf("Enter a number from (1 to 11)\n1.ADD\n2.DELETE\n3.MODIFY\n4.WITHDRAW\n5.TRANSFER\n6.DEPOSIT\n7.REPORT\n8.QUERY\n9.ADVANCED SEARCH\n10.PRINT\n11.QUIT\n");
         scanf("%s", n);
         fflush(stdin);
+        if(!checkNumber(n));
+            else
         switch (atoi(n))
         {
         case 1:
