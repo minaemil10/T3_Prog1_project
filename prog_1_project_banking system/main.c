@@ -311,7 +311,7 @@ char* validateDuplication(char *printvalue,int i)
 
 int checkName(char*name,int i)
 {
-    if(name[i]>='a'&& name[i]<= 'z'||(name[i] >='A'&& name[i] <='Z'))
+    if(name[i]>='a'&& name[i]<= 'z'||name[i] >='A'&& name[i] <='Z')
         return 1;
     else return 0;
 }
@@ -351,40 +351,63 @@ char* validateName()
 char* validateEmail()
 {
     char* email = (char*)malloc(100* sizeof(char));
-    int flag_mail_at=0,flag_mail_dot=0,i,j;
-    do
+    int i,j;
+
+
+    printf("Please enter your email: ");
+    scanf("%s",email);
+    getchar();
+
+    for (i = 0; email[i] != '\0'; i++)
     {
+<<<<<<< Updated upstream
         flag_mail_at=0,flag_mail_dot=0;
         printf("Please enter your email: ");
         scanf("%s",email);
         fflush(stdin);
         for (i = 0; email[i] != '\0'; i++)
+=======
+        if(email[i] == '@')
+>>>>>>> Stashed changes
         {
-            if (email[i] == '@')
+            if(checkName(email,i-1) && checkName(email,i+1))
             {
-                flag_mail_at = 1;
-                for(j=i-1; email[j]!='\0'; j++)
+                for(j=i+2; email[j]!='\0'; j++)
                 {
-                    if(email[j]=='.')
+                    if(email[j] == '.')
                     {
-                        flag_mail_dot=1;
-                        break;
+                        if(checkName(email,j+1 )&&checkName(email,j-1))
+                        {
+                            return email ;
+                        }
+                        else
+                        {
+                            printf("Error: Invalid Email format\n");
+                            validateEmail();
+
+                        }
+                    }
+                    else
+                    {
+                        printf("Error: Invalid Email format\n");
+                        validateEmail();
                     }
                 }
-            }
-        }
 
-        if (!flag_mail_at)
-        {
-            printf("Error: Email must contain @\n");
+            }
+            else
+                {
+                    printf("Error: Invalid Email format\n");
+                    validateEmail();
+                }
         }
-        else if(!flag_mail_dot)
+        else
         {
-            printf("Error: Email must contain . after @\n");
+            printf("Error: Invalid Email format\n");
+            validateEmail();
         }
     }
-    while (!flag_mail_at||!flag_mail_dot);
-    return email;
+
 }
 
 char* validateBalance()
@@ -831,47 +854,47 @@ void print()
         fflush(stdin);
         if(!checkNumber(way))
             flag_no=0;
-            else
-        switch(atoi(way))
-        {
-        case 1:
+        else
+            switch(atoi(way))
+            {
+            case 1:
 
-            printf("Please choose the type:\n");
-            printf("1) A-Z\n2) Z-A\n");
-            do
-            {
-                scanf("%s",type);
-                if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
+                printf("Please choose the type:\n");
+                printf("1) A-Z\n2) Z-A\n");
+                do
+                {
+                    scanf("%s",type);
+                    if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
+                }
+                while(!(atoi(type)>0 && atoi(type)<3));
+                sortByName(sorted,atoi(type));
+                break;
+            case 2:
+                printf("Please choose the type:\n");
+                printf("1) Highest to Lowest\n2) Lowest to Highest\n");
+                do
+                {
+                    scanf("%s",type);
+                    if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
+                }
+                while(!(atoi(type)>0 && atoi(type)<3));
+                sortByBalance(sorted,atoi(type));
+                break;
+            case 3:
+                printf("Please choose the type:\n");
+                printf("1) Old to New\n2) New to Old\n");
+                do
+                {
+                    scanf("%s",type);
+                    if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
+                }
+                while(!(atoi(type)>0 && atoi(type)<3));
+                sortByDate(sorted,atoi(type));
+                break;
+            default:
+                printf("The Number you entered is not in range\nTRY AGAIN\n");
+                flag=0;
             }
-            while(!(atoi(type)>0 && atoi(type)<3));
-            sortByName(sorted,atoi(type));
-            break;
-        case 2:
-            printf("Please choose the type:\n");
-            printf("1) Highest to Lowest\n2) Lowest to Highest\n");
-            do
-            {
-                scanf("%s",type);
-                if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
-            }
-            while(!(atoi(type)>0 && atoi(type)<3));
-            sortByBalance(sorted,atoi(type));
-            break;
-        case 3:
-            printf("Please choose the type:\n");
-            printf("1) Old to New\n2) New to Old\n");
-            do
-            {
-                scanf("%s",type);
-                if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
-            }
-            while(!(atoi(type)>0 && atoi(type)<3));
-            sortByDate(sorted,atoi(type));
-            break;
-        default:
-            printf("The Number you entered is not in range\nTRY AGAIN\n");
-            flag=0;
-        }
     }
     while(!flag||!flag_no);
     printf("\n\n");
@@ -935,6 +958,7 @@ void modify ()
         printf("What do you want to modify\n1)Name\n2)Mobile\n3)Email\n4)Return to Menu\n");
         char choice[30];
         scanf("%s", choice);
+<<<<<<< Updated upstream
         fflush(stdin);
                 if(!checkNumber(choice))
                     flag_no=0;
@@ -946,48 +970,61 @@ void modify ()
         {
             strcpy(temp,validateName());
             if(askSave())
+=======
+        getchar();
+        if(!checkNumber(choice))
+            flag_no=0;
+        else
+            switch (atoi(choice))
+>>>>>>> Stashed changes
             {
-                strcpy(accounts[i].name,temp);
-                save();
-                break;
-            }
-            else MENU();
-        }
 
-        case 2:
-        {
-
-            strcpy(temp,validateMobile());
-            if(askSave())
+            case 1:
             {
-                strcpy(accounts[i].mobile,temp);
-                save();
-                break;
+                strcpy(temp,validateName());
+                if(askSave())
+                {
+                    strcpy(accounts[i].name,temp);
+                    save();
+                    break;
+                }
+                else MENU();
             }
-            else MENU();
-        }
 
-        case 3:
-        {
-
-            strcpy(temp,validateEmail());
-            if(askSave())
+            case 2:
             {
-                strcpy(accounts[i].mail,temp);
-                save();
-                break;
-            }
-            else MENU();
-        }
-        case 4:
-            return;
 
-        default:
-        {
-            printf("The Number you entered is not in range\nTRY AGAIN\n");
-            flag = 0;
-        }
-        }
+                strcpy(temp,validateMobile());
+                if(askSave())
+                {
+                    strcpy(accounts[i].mobile,temp);
+                    save();
+                    break;
+                }
+                else MENU();
+            }
+
+            case 3:
+            {
+
+                strcpy(temp,validateEmail());
+                if(askSave())
+                {
+                    strcpy(accounts[i].mail,temp);
+                    save();
+                    break;
+                }
+                else MENU();
+            }
+            case 4:
+                return;
+
+            default:
+            {
+                printf("The Number you entered is not in range\nTRY AGAIN\n");
+                flag = 0;
+            }
+            }
     }
     while(!flag||!flag_no);
 }
@@ -1059,7 +1096,13 @@ void askMenu()
     char choice[30];
     printf("What do you want\n1)Continue\n2)Return to Menu\n");
     scanf("%s",choice);
+<<<<<<< Updated upstream
     fflush(stdin);
+=======
+    getchar();
+            if(!checkNumber(choice));
+            else
+>>>>>>> Stashed changes
     switch(atoi(choice))
     {
     case 1:
@@ -1077,7 +1120,13 @@ int askSave()
     char choice[30];
     printf("Do you want to save the changes?\n1)Yes\t2)No\n");
     scanf("%s",choice);
+<<<<<<< Updated upstream
     fflush(stdin);
+=======
+    if(!checkNumber(choice));
+            else
+    getchar();
+>>>>>>> Stashed changes
 
     switch(atoi(choice))
     {
@@ -1123,46 +1172,46 @@ void MENU()
         scanf("%s", n);
         fflush(stdin);
         if(!checkNumber(n));
-            else
-        switch (atoi(n))
-        {
-        case 1:
-            add();
-            break;
-        case 2:
-            deleteacc();
-            break;
-        case 3:
-            modify();
-            break;
-        case 4:
-            WITHDRAW();
-            break;
-        case 5:
-            TRANSFER();
-            break;
-        case 6:
-            DEPOSIT();
-            break;
-        case 7:
-            report();
-            break;
-        case 8:
-            QUERY();
-            break;
-        case 9:
-            advancedSearch();
-            break;
-        case 10:
-            print();
-            break;
-        case 11:
-            quit(2);
-            break;
-        default:
-            system("cls");
-            printf("The Number you entered is not in range\nTRY AGAIN\n");
-        }
+        else
+            switch (atoi(n))
+            {
+            case 1:
+                add();
+                break;
+            case 2:
+                deleteacc();
+                break;
+            case 3:
+                modify();
+                break;
+            case 4:
+                WITHDRAW();
+                break;
+            case 5:
+                TRANSFER();
+                break;
+            case 6:
+                DEPOSIT();
+                break;
+            case 7:
+                report();
+                break;
+            case 8:
+                QUERY();
+                break;
+            case 9:
+                advancedSearch();
+                break;
+            case 10:
+                print();
+                break;
+            case 11:
+                quit(2);
+                break;
+            default:
+                system("cls");
+                printf("The Number you entered is not in range\nTRY AGAIN\n");
+            }
     }
     while(1);
 }
