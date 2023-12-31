@@ -137,7 +137,7 @@ int loadAccounts()
         if (count >= MAX_ACCOUNTS)
         {
             printf("Maximum account limit reached: %d\n", MAX_ACCOUNTS);
-            return 0;
+            exit(1);
         }
     }
 
