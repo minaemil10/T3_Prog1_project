@@ -187,12 +187,10 @@ int login()
     {
         system("cls");
         printf("Invalid username or password\n");
+        fclose(file);
         return 0;
 
     }
-
-    fclose(file);
-    return 0;
 }
 
 int quit()
@@ -201,7 +199,6 @@ int quit()
     char val[30];
     scanf("%s",val);
     fflush(stdin);
-
     if(!checkNumber(val))
         quit();
     else if(atoi(val)==1)
@@ -321,14 +318,14 @@ int checkName(char*name,int i)
 
 char* validateName()
 {
-    int flag_name,countSpace=0;
+    int flag_name = 1,countSpace=0,i;
     char* name = (char*)malloc(100* sizeof(char));
     do
     {
         countSpace=0;
         printf("Enter your name: ");
         gets(name);
-        for (int i=0; i<strlen(name); i++)
+        for (i=0; i<strlen(name); i++)
         {
             flag_name = 1;
             if (!(checkName(name,i)||(name[i] == ' ')))
@@ -427,15 +424,13 @@ char* validateMobile()
     do
     {
         flag_mobile=0;
-        printf("Enter the mobile number: ");
-        scanf("%s", mobileNumber);
-        fflush(stdin);
-        while(!checkNumber(mobileNumber))
+        do
         {
             printf("Enter the mobile number: ");
             scanf("%s", mobileNumber);
             fflush(stdin);
         }
+        while(!checkNumber(mobileNumber));
         if(strlen(mobileNumber)!=11)
         {
             printf("Error: Mobile number must consist of 11 numbers\n");
@@ -488,23 +483,23 @@ void add()
     ptr=validateBalance();
     temp.balance=atof(ptr);
     free(ptr);
-    time_t t;
-    time(&t);
-    struct tm *tm_info = localtime(&t);
-    temp.d_open.month = tm_info->tm_mon + 1;
-    temp.d_open.year = tm_info->tm_year + 1900;
+    time_t t; //struct to store in seconds
+    time(&t); //function to store current time in seconds in the struct created before
+    struct tm *tm_info = localtime(&t); //function to localize time in seconds
+    temp.d_open.month = tm_info->tm_mon + 1; //add one as the month is counted from 0 in this fn and out months start from 1
+    temp.d_open.year = tm_info->tm_year + 1900; // add 1900 because the fn start counting the seconds from year 1900AD
     if(askSave())
     {
         accounts[i]=temp;
         char filename[30] ;
         sprintf(filename,"%s.txt",accounts[i].account_no);
-        FILE *file1=fopen(filename, "w");
-        if (file1 == NULL)
+        FILE *file=fopen(filename, "w");
+        if (file == NULL)
         {
             printf("Error opening file\n");
             exit(1);
         }
-        fclose(file1);
+        fclose(file);
         save();
     }
     else MENU();
@@ -516,10 +511,10 @@ void DEPOSIT()
     char*ptr;
     char printvalue[]="Enter the account number: ";
     char accountNumber[MAX_ACCOUNT_LENGTH];
+    char  depositAmount[100];
     ptr=validateAccountNumber(printvalue,&i);
     strcpy(accountNumber,ptr);
     free(ptr);
-    char  depositAmount[100];
     do
     {
         ptr=validateBalance();
@@ -574,18 +569,13 @@ void TRANSFER()
         ptr=validateBalance();
         strcpy(transferAmount,ptr);
         free(ptr);
-        ptr=validateBalanceExistance(transferAmount,i);
-        if(!ptr)
-
+        if(validateBalanceExistance(transferAmount,i))
         {
             askMenu();
             flag_existance=0;
         }
-        free(ptr);
-        ptr=validateBalance100000(transferAmount);
     }
-    while(!ptr||!flag_existance);
-    free(ptr);
+    while(!validateBalance100000(transferAmount)||!flag_existance);
     if(askSave)
     {
         accounts[i].balance-=atof(transferAmount);
@@ -605,7 +595,6 @@ void TRANSFER()
             printf("Error opening file");
             exit(1);
         }
-
         fprintf(file2, "Transferred amount to the account: %f New Balance: %f\n",transfer,accounts[j].balance);
         fclose(file1);
         fclose(file2);
@@ -629,18 +618,14 @@ void WITHDRAW()
         ptr=validateBalance();
         strcpy(withdrawnAmount,ptr);
         free(ptr);
-        ptr=validateBalanceExistance(withdrawnAmount,i);
-        if(!ptr)
+        if(!validateBalanceExistance(withdrawnAmount,i))
         {
             askMenu();
             flag_existance=0;
         }
-        free(ptr);
-        ptr=validateBalance100000(withdrawnAmount);
     }
 
-    while(!ptr||!flag_existance);
-    free(ptr);
+    while(!validateBalance100000(withdrawnAmount)||!flag_existance);
     if(askSave)
     {
         accounts[i].balance-=atof(withdrawnAmount);
@@ -684,7 +669,7 @@ void advancedSearch()
 
                 for(k = j ; k-j <= keylen ; k++ )
                 {
-                    if(isspace(accounts[i].name[k]))
+                    if(isspace(accounts[i].name[k]) && accounts[i].name[k] != keyword[k-j])
                     {
                         k++; //to jump the space
                         j++; //to keep the original k-j
@@ -695,7 +680,7 @@ void advancedSearch()
                     {
                         good++; //used to check that all consecutive matched letters are = the length of the original keyword
                     }
-                    if(good == keylen && hold != i) //hold used here because the same name could have several instances of the same keyword while is should be stored only once
+                    if(good == keylen && hold != i) //hold used here because the same name could have several instances of the same keyword while it should be stored only once
                     {
                         hold = i;
                         matchedlen++;
@@ -887,7 +872,7 @@ void sortByDate(user *a,int z)
 void print()
 {
     user sorted[MAX_ACCOUNTS] ;
-    int i,flag=1,flag_no=1;
+    int i,flag=1,flag_no=1,flag_type = 1;
     char way[30],type[30];
     for(i=0 ; i < count ; i++)
     {
@@ -911,10 +896,14 @@ void print()
                 printf("1) A-Z\n2) Z-A\n");
                 do
                 {
+                    flag_type = 1;
                     scanf("%s",type);
+                    fflush(stdin);
+                    if(!checkNumber(type))
+                        flag_type=0;
                     if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
                 }
-                while(!(atoi(type)>0 && atoi(type)<3));
+                while(!(atoi(type)>0 && atoi(type)<3 && flag_type == 1));
                 sortByName(sorted,atoi(type));
                 break;
             case 2:
@@ -922,10 +911,14 @@ void print()
                 printf("1) Highest to Lowest\n2) Lowest to Highest\n");
                 do
                 {
+                    flag_type = 1;
                     scanf("%s",type);
+                    fflush(stdin);
+                    if(!checkNumber(type))
+                        flag_type=0;
                     if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
                 }
-                while(!(atoi(type)>0 && atoi(type)<3));
+                while(!(atoi(type)>0 && atoi(type)<3 && flag_type == 1));
                 sortByBalance(sorted,atoi(type));
                 break;
             case 3:
@@ -933,10 +926,14 @@ void print()
                 printf("1) Old to New\n2) New to Old\n");
                 do
                 {
+                    flag_type = 1;
                     scanf("%s",type);
+                    fflush(stdin);
+                    if(!checkNumber(type))
+                        flag_type=0;
                     if(!(atoi(type)>0 && atoi(type)<3)) printf("The Number you entered is not in range\nTRY AGAIN\n");
                 }
-                while(!(atoi(type)>0 && atoi(type)<3));
+                while(!(atoi(type)>0 && atoi(type)<3 && flag_type == 1));
                 sortByDate(sorted,atoi(type));
                 break;
             default:
@@ -1158,12 +1155,12 @@ void askMenu()
     printf("What do you want\n1)Continue\n2)Return to Menu\n");
     scanf("%s",choice);
     fflush(stdin);
-    if(!checkNumber(choice));
+    if(!checkNumber(choice))askMenu();
     else
         switch(atoi(choice))
         {
         case 1:
-            return;
+            break;
         case 2:
             MENU();
         default:
@@ -1177,7 +1174,8 @@ int askSave()
     char choice[30];
     printf("Do you want to save the changes?\n1)Yes\n2)No\n");
     scanf("%s",choice);
-    if(!checkNumber(choice));
+    fflush(stdin);
+    if(!checkNumber(choice)) askSave();
     else
 
         switch(atoi(choice))
@@ -1186,7 +1184,7 @@ int askSave()
             return 1;
         case 2:
             return 0;
-        case 3:
+        default:
             printf("The Number you entered is not in range\nTry Again");
             askSave();
         }
@@ -1196,24 +1194,24 @@ int askSave()
 int flag_login = 0;
 void MENU()
 {
-    char n[30];
+    char choice[30];
     system("cls");
     while (!flag_login)
 
     {
         printf("Enter (1 or 2)\n1.LOGIN\n2.QUIT\n");
-        scanf("%s", n);
+        scanf("%s", choice);
         fflush(stdin);
-        if(!checkNumber(n));
-        else if(atoi(n)!=1&&atoi(n)!=2 )
+        if(!checkNumber(choice));
+        else if(atoi(choice)!=1&&atoi(choice)!=2 )
         {
             system("cls");
             printf("The Number you entered is not in range\nTRY AGAIN\n");
         }
         else
         {
-            if (atoi(n) == 2) quit(1);
-            if (atoi(n) == 1 && login() == 1)  flag_login++;
+            if (atoi(choice) == 2) quit(1);
+            if (atoi(choice) == 1 && login() == 1)  flag_login++;
         }
 
     }
@@ -1223,11 +1221,11 @@ void MENU()
     {
 
         printf("Enter a number from (1 to 11)\n1.ADD\n2.DELETE\n3.MODIFY\n4.WITHDRAW\n5.TRANSFER\n6.DEPOSIT\n7.REPORT\n8.QUERY\n9.ADVANCED SEARCH\n10.PRINT\n11.QUIT\n");
-        scanf("%s", n);
+        scanf("%s", choice);
         fflush(stdin);
-        if(!checkNumber(n));
+        if(!checkNumber(choice));
         else
-            switch (atoi(n))
+            switch (atoi(choice))
             {
             case 1:
                 add();
@@ -1260,7 +1258,7 @@ void MENU()
                 print();
                 break;
             case 11:
-                quit(2);
+                quit();
                 break;
             default:
                 system("cls");
