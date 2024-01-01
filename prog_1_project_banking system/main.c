@@ -654,37 +654,37 @@ void advancedSearch()
     printf("Enter Keyword: ");
     gets(keyword);
     keylen = strlen(keyword);
-    for(i = 0; i < count ; i++)
+    for(i = 0; i < count ; i++) //i = index of accounts
     {
         good = 0;
         namelen = strlen(accounts[i].name);
-        for(j = 0 ; j < namelen  ; j++  )
+        for(j = 0 ; j < namelen  ; j++  ) // j = index of chars in name array of the account with index i
         {
             good = 0;
 
-            check1 = (accounts[i].name[j] == keyword[0] || (accounts[i].name[j] + 32) == keyword[0] || (accounts[i].name[j] - 32) == keyword[0]); //capital check
+            check1 = (accounts[i].name[j] == keyword[0] || (accounts[i].name[j] + 32) == keyword[0] || (accounts[i].name[j] - 32) == keyword[0]); //not case sensitive
             if(check1)
             {
                 good = 0;
 
-                for(k = j ; k-j <= keylen ; k++ )
+                for(k = j ; k-j <= keylen ; k++ ) //k = index of character that matched the first character of keyword and k-j is used to pass on array of the keyword
                 {
-                    if(isspace(accounts[i].name[k]) && accounts[i].name[k] != keyword[k-j])
+                    if(isspace(accounts[i].name[k]) && accounts[i].name[k] != keyword[k-j]) //jump any space in the name array except if keyword[] has a space at the same instance
                     {
                         k++; //to jump the space
                         j++; //to keep the original k-j
                     }
-                    check2 = (accounts[i].name[k] == keyword[k-j] || (accounts[i].name[k] + 32) == keyword[k-j] || (accounts[i].name[k] - 32) == keyword[k-j])  ;
+                    check2 = (accounts[i].name[k] == keyword[k-j] || (accounts[i].name[k] + 32) == keyword[k-j] || (accounts[i].name[k] - 32) == keyword[k-j])  ; //not case sensitive
 
                     if(check2)
                     {
                         good++; //used to check that all consecutive matched letters are = the length of the original keyword
                     }
-                    if(good == keylen && hold != i) //hold used here because the same name could have several instances of the same keyword while it should be stored only once
+                    if(good == keylen && hold != i) //if good = keyword len and you never addded this before please add it
                     {
-                        hold = i;
-                        matchedlen++;
-                        matched[matchedlen] = accounts[i];
+                        hold = i;  //hold used here because the same name could have several instances of the same keyword while it should be stored only once
+                        matchedlen++; //used as a flag to check if any matches was found
+                        matched[matchedlen] = accounts[i]; //add the account that had the keyword to the array that will be added
                     }
                 }
             }
