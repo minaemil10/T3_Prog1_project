@@ -702,7 +702,7 @@ void advancedSearch()
     printf("\n\nSearch results:\n\n");
     if(matchedlen != -1)
     {
-        for(i = 0 ; i <= matchedlen ; i ++)
+        for(i = 0 ; i <= matchedlen ; i ++) //prints all matched accounts.
         {
             printer(matched[i]);
             printf("\n");
@@ -810,8 +810,6 @@ void sortByBalance(user *a,int z)
         {
             if(z == 1)
             {
-
-
                 if((a+ j)-> balance < (a+ j +1)-> balance)
                 {
                     x =  (*(a+ j));
