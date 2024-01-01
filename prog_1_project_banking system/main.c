@@ -1088,14 +1088,10 @@ void report ()
     int i;
     char printvalue[]="Enter account number: ";
     char*ptr;
-    ptr=validateAccountNumber(printvalue,&i);
-    strcpy(accounts[i].account_no,ptr);
-    free(ptr);
+    validateAccountNumber(printvalue,&i);
     char filename[30];
     sprintf(filename,"%s.txt",accounts[i].account_no);
-    FILE *file1=fopen(filename, "a");
-
-    FILE*file=fopen(filename,"r");
+    FILE *file=fopen(filename, "a+");
 
     if (file== NULL)
     {
