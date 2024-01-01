@@ -543,7 +543,7 @@ void DEPOSIT()
 
 void TRANSFER()
 {
-    int i,j,flag_existance=1;
+    int i,j,flag_existance=1,flag_10000=1;
     char*ptr;
     char printvalue1[]="Enter the account number to transfer money from: ";
     char accountNumber1[MAX_ACCOUNT_LENGTH];
@@ -566,16 +566,19 @@ void TRANSFER()
     char  transferAmount[100];
     do
     {
+        flag_existance=1,flag_10000=1;
         ptr=validateBalance();
         strcpy(transferAmount,ptr);
         free(ptr);
-        if(validateBalanceExistance(transferAmount,i))
+        if(!validateBalance100000(transferAmount))
+            flag_10000=0;
+        if(!validateBalanceExistance(transferAmount,i))
         {
             askMenu();
             flag_existance=0;
         }
     }
-    while(!validateBalance100000(transferAmount)||!flag_existance);
+    while(!flag_10000||!flag_existance);
     if(askSave)
     {
         accounts[i].balance-=atof(transferAmount);
@@ -605,7 +608,7 @@ void TRANSFER()
 
 void WITHDRAW()
 {
-    int i,flag_existance=1;
+    int i,flag_existance=1,flag_10000=1;
     char printvalue[]="Enter the account number: ";
     char accountNumber[MAX_ACCOUNT_LENGTH];
     char* ptr;
@@ -615,17 +618,22 @@ void WITHDRAW()
     char  withdrawnAmount[100];
     do
     {
+        flag_existance=1,flag_10000=1;
         ptr=validateBalance();
         strcpy(withdrawnAmount,ptr);
         free(ptr);
+        if(!validateBalance100000(withdrawnAmount))
+
+            {
+                flag_10000=0;
+            }
         if(!validateBalanceExistance(withdrawnAmount,i))
         {
             askMenu();
             flag_existance=0;
         }
     }
-
-    while(!validateBalance100000(withdrawnAmount)||!flag_existance);
+    while(!flag_10000||!flag_existance);
     if(askSave)
     {
         accounts[i].balance-=atof(withdrawnAmount);
