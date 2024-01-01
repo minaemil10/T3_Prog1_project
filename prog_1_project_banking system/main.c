@@ -984,11 +984,11 @@ void deleteacc()
             err = remove(filename);
             if(err == 1)
             {
-                printf("file deleted successfully\n");
+                printf("File has been deleted successfully\n");
             }
             else
             {
-                printf("file deleted successfully\n");
+                printf("File not deleted\n");
             }
             for( i; i<count-1; i++)
             {
@@ -1088,7 +1088,9 @@ void report ()
     int i;
     char printvalue[]="Enter account number: ";
     char*ptr;
-    validateAccountNumber(printvalue,&i);
+    ptr=validateAccountNumber(printvalue,&i);
+    strcpy(accounts[i].account_no,ptr);
+    free(ptr);
     char filename[30];
     sprintf(filename,"%s.txt",accounts[i].account_no);
     FILE *file=fopen(filename, "a+");
