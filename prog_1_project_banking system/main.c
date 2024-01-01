@@ -1206,7 +1206,7 @@ void MENU()
         }
         else
         {
-            if (atoi(choice) == 2) quit(1);
+            if (atoi(choice) == 2) quit();
             if (atoi(choice) == 1 && login() == 1)  flag_login++;
         }
 
