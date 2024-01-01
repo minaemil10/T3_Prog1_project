@@ -572,7 +572,7 @@ void TRANSFER()
         free(ptr);
         if(!validateBalance100000(transferAmount))
             flag_10000=0;
-        if(!validateBalanceExistance(transferAmount,i))
+       else if(!validateBalanceExistance(transferAmount,i))
         {
             askMenu();
             flag_existance=0;
@@ -627,7 +627,7 @@ void WITHDRAW()
             {
                 flag_10000=0;
             }
-        if(!validateBalanceExistance(withdrawnAmount,i))
+       else if(!validateBalanceExistance(withdrawnAmount,i))
         {
             askMenu();
             flag_existance=0;
