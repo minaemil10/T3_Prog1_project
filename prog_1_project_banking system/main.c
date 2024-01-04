@@ -351,56 +351,48 @@ char* validateName()
 char* validateEmail()
 {
     char* email = (char*)malloc(100* sizeof(char));
-    int i,j,flag_dot = 0, flag_at = 0;
-
-
-    printf("Enter your email: ");
-    scanf("%s",email);
-    fflush(stdin);
-
-    for (i = 0; email[i] != '\0'; i++)
+    int i,j;
+    char flag_dotc = 0,flag_dot = 0, flag_at = 0,flag_atc = 0;
+    do
     {
-        if(email[i] == '@')
+        printf("Enter your email: ");
+        scanf("%s",email);
+        fflush(stdin);
+        flag_at = 0;
+        flag_atc = 0 ;
+        flag_dot = 0 ;
+        flag_dotc = 0;
+        for (i = 0; email[i] != '\0'; i++)
         {
-            flag_at = 1;
-            if(checkName(email,i-1) && checkName(email,i+1))
+            if(email[i] == '@')
             {
-                for(j=i+2; email[j]!='\0'; j++)
+                flag_at++; //user can't enter '@' twice
+                if(checkName(email,i-1) && checkName(email,i+1))
                 {
-                    if(email[j] == '.')
+                    flag_atc ++;
+                    for(j=i+2; email[j]!='\0'; j++)
                     {
-                        flag_dot = 1;
-                        if(checkName(email,j+1 )&&checkName(email,j-1))
+                        if(email[j] == '@') break;
+                        if(email[j] == '.')
                         {
-                            return email ;
-                        }
-                        else
-                        {
-                            printf("Error: Invalid Email format\n");
-                            validateEmail();
+                            flag_dot++;
+                            if(checkName(email,j+1 )&&checkName(email,j-1))
+                            {
+                                flag_dotc ++;
+                            }
                         }
                     }
+                }
+            }
 
-                }
-                if(flag_dot == 0)
-                {
-                    printf("Error: Invalid Email format\n");
-                    validateEmail();
-                }
-            }
-            else
-            {
-                printf("Error: Invalid Email format\n");
-                validateEmail();
-            }
         }
-
+        if(!(flag_at == 1 && flag_atc == 1 && flag_dot == 1 && flag_dotc == 1))
+        {
+            printf("Error: Invalid Email format\n");
+        }
+        else return email ;
     }
-    if(flag_at == 0)
-    {
-        printf("Error: Invalid Email format\n");
-        validateEmail();
-    }
+    while(!(flag_at == 1 && flag_atc == 1 && flag_dot == 1 && flag_dotc == 1));
 }
 
 
@@ -572,7 +564,7 @@ void TRANSFER()
         free(ptr);
         if(!validateBalance100000(transferAmount))
             flag_10000=0;
-       else if(!validateBalanceExistance(transferAmount,i))
+        else if(!validateBalanceExistance(transferAmount,i))
         {
             askMenu();
             flag_existance=0;
@@ -624,10 +616,10 @@ void WITHDRAW()
         free(ptr);
         if(!validateBalance100000(withdrawnAmount))
 
-            {
-                flag_10000=0;
-            }
-       else if(!validateBalanceExistance(withdrawnAmount,i))
+        {
+            flag_10000=0;
+        }
+        else if(!validateBalanceExistance(withdrawnAmount,i))
         {
             askMenu();
             flag_existance=0;
@@ -970,13 +962,14 @@ void QUERY()
 
 void deleteacc()
 {
-    int i,flag=0,err;
+    int i,flag=0,err,j ;
     char filename[11];
     char*ptr;
     char printvalue[]="Enter account number: ";
 
     ptr=validateAccountNumber(printvalue,&i);
     free(ptr);
+    j = i; //to store the value of I and use it instead of i because for some unknown reason value of I change after line 991 where Sprintf() is executed
     if(accounts[i].balance!=0)
     {
         printf("Balance not equal to zero, Account cannot be deleted\n");
@@ -986,9 +979,9 @@ void deleteacc()
     {
         if(askSave())
         {
-            sprintf(filename,"%s.txt",accounts[i].account_no);
+            sprintf(filename,"%s.txt",accounts[j].account_no);
             err = remove(filename);
-            if(err == 1)
+            if(err == 0)
             {
                 printf("File has been deleted successfully\n");
             }
@@ -996,9 +989,9 @@ void deleteacc()
             {
                 printf("File not deleted\n");
             }
-            for( i; i<count-1; i++)
+            for( j; j < count; j++)
             {
-                accounts[i]=accounts[i+1];
+                accounts[j]=accounts[j+1];
             }
             count--;
             printf("The account has been deleted\n");
